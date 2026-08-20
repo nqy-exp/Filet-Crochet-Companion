@@ -1,3 +1,4 @@
+
 # 🧶 Filet Crochet Companion (Beta)
 
 **Vibe Coding Project.** I built this because I kept losing track of rows while crocheting filet lace patterns. This companion helps you focus on specific sections, move around, and mark your progress easily.
@@ -6,6 +7,8 @@
 A specialized tool designed to:
 1. **Digitize:** Convert pattern images into Excel files.
 2. **Track:** Import existing Excel patterns to track progress and mark motifs directly in the app.
+
+<img width="1200" height="813" alt="FCC-index" src="https://github.com/user-attachments/assets/829743ee-dca0-47d7-a633-25ea07396edc" />
 
 ### ✨ Key Features
 
