@@ -74,9 +74,11 @@ ipcMain.handle('save-global-config', async (event, newConfig) => {
 app.whenReady().then(createWindow);
 
 
+// 修改后的代码
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
+  app.quit(); // 不管是 Mac 还是 Windows，只要窗口关了，程序就直接退出
 });
+
 
 
 
