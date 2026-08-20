@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="app_title">Filet Crochet Companion - Workspace</title>
+    <!-- 此处省略你原有的 <style> 内容，请务必保留你原来的 CSS -->
+     <style>
+        /* --- 🎨 温暖手工风格设计变量 --- */
+        :root {
+            --bg-main: #1a1a1a;          /* 画布背景 (深色) */
+            --bg-paper: #fdf5e6;         /* 全局暖米色背景 */
+            --bg-hud: #eaddca;           /* 底栏模块背景 (温暖的浅棕/米色) */
+            --bg-card: #ffffff;          /* 模块卡片颜色 (纯白，增加对比度) */
+            --text-main: #4a3728;        /* 深巧克力色文字 */
+            --text-muted: #8d7b68;       /* 柔和棕色文字 */
+            --border-color: #dcd0c0;     /* 模块边框线 */
+            --accent-new: #f1c40f;       /* 新建按钮 (黄色) */
+            --accent-open: #3498db;      /* 打开按钮 (蓝色) */
+            --accent-save: #2ecc71;      /* 保存按钮 (绿色) */
+            --accent-import: #e67e22;    /* 导入按钮 (橙色) */
+            --shadow: 0 4px 15px rgba(74, 55, 40, 0.12); /* 温暖的阴影 */
+            --radius: 12px;              /* 圆角大小 */
+        }
+
+        /* --- 基础布局 --- */
+        body { 
+            margin: 0; padding: 0; 
+            background-color: var(--bg-main); 
+            color: var(--text-main);
+            font-family: 'Segoe UI', 'Hiragino Sans GB', sans-serif;
+            display: flex;
+            flex-direction: column; 
+            height: 100vh;
+            overflow: hidden; /* 防止整个页面出现滚动条 */
+        }
+
+/* --- 🔝 顶部控制栏 (Top Bar) --- */
+#top-bar {
+    height: 50px;
+    background-color: var(--bg-hud);
+    padding: 0 20px;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    z-index: 100;
+
+    /* 【关键修改】：使用 Grid 布局 */
+    display: grid;
+    /* 创建三列：第一列自适应，第二列根据内容宽度自动缩放，第三列自适应 */
+    grid-template-columns: 1fr auto 1fr; 
+    align-items: center;
+}
+
+/* --- 统一所有子小组的样式 --- */
+.tool-subgroup {
+    display: flex;
+    gap: 8px; 
+    align-items: center;
+}
+
+/* 让左侧组靠左对齐 */
+#top-bar > .tool-subgroup:nth-child(1) {
+    justify-self: start;
+}
+
+/* 让中间的数字化工具组在网格中心对齐 (完美居中) */
+#top-bar > .tool-subgroup:nth-child(2) {
+    justify-self: center;
+}
+
+/* 让右侧的操作组靠右对齐 */
+.top-actions-group {
+    display: flex;
+    gap: 10px;
+    justify-self: end; /* 【关键】：确保它在 grid 的最后一列靠右 */
+}
+
+
+
+        .top-btn {
+            background: white; border: 1px solid var(--border-color); color: var(--text-main);
+            cursor: pointer; font-size: 14px; font-weight: bold;
+            padding: 5px 15px; border-radius: 20px;
+            transition: all 0.2s; display: flex; align-items: center; gap: 5px;
+        }
+        .top-btn:hover { background: var(--bg-paper); transform: translateY(-1px); }
+        .top-btn:disabled {
+            background-color: #bdc3c7 !important;
+            color: #7f8c8d !important;
+            cursor: not-allowed !important;
+            opacity: 0.6 !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* --- 🖼️ 中间工作区 (Main Workspace) --- */
+        #canvas-container {
+            flex-grow: 1; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: visible !important;
+        }
+
+        #mainCanvas { display: block; }
+
+        /* --- 🗺️ 小地图 (Minimap) 修复版 --- */
+#minimap-container {
+    position: absolute; 
+    top: 1px; 
+    right: 1px; 
+    /* 【重要】：删掉 width 和 height，改为由 JS 通过 applySettings 控制 */
+    background: #ffffff; 
+    border: 2px solid var(--border-color); 
+    border-radius: 8px; 
+    padding: 5px;      
+    box-sizing: border-box; 
+    z-index: 10; 
+    overflow: hidden;
+
+    /* 【新增】：添加 Flex 布局，确保无论你把框改成多大，里面的图片都会在框内居中且不拉伸 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+        #minimap-content-wrapper {
+            position: relative; /* 为黄框提供定位基准 */
+            display: flex;      /* 消除间隙 */
+            width: 100%;
+            height: 100%;
+        }
+        #minimap-canvas { 
+            width: 100% !important; height: 100% !important; 
+            display: block; image-rendering: pixelated; 
+        }
+        #minimap-view-rect { 
+            position: absolute; border: 2px solid #f1c40f; pointer-events: none; z-index: 11; 
+        }
+
+        /* --- 🛠️ 底部模块化 HUD (Modular HUD) --- */
+        #hud {
+            height: 160px; /* 【已调高】让布局更舒展 */
+            background-color: var(--bg-paper);
+            display: flex;
+            align-items: stretch; 
+            padding: 12px 20px;
+            gap: 15px;
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0; /* 防止被压缩 */
+        }
+
+        /* 模块卡片通用样式 */
+        .hud-module {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .card-label { 
+            font-size: 12px; color: var(--text-muted); font-weight: bold; 
+            margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        /* --- A. Emoji 模块 (升级版：精致小方块) --- */
+        #emoji-module { flex: 1.5; }
+        #emoji-palette { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); /* 【已缩小】 */
+            gap: 6px; 
+            align-content: start; 
+            padding: 2px;
+            overflow-x: auto;
+            height: 100%;
+        }
+        .emoji-tile {
+            aspect-ratio: 1 / 1;
+            background: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            font-size: 20px; /* 【已缩小】 */
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            user-select: none;
+        }
+        .emoji-tile:hover {
+            transform: translateY(-3px) scale(1.1);
+            background: #ffffff;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+            border-color: var(--accent-open);
+        }
+        .emoji-tile:active { transform: scale(0.9); cursor: grabbing; }
+
+        /* 自定义滚动条 */
+        #emoji-palette::-webkit-scrollbar { width: 4px; }
+        #emoji-palette::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+
+        /* --- B. 项目备注模块 --- */
+        #notes-module { flex: 2.5; }
+        #project-notes {
+            flex-grow: 1; border: none; background: #fcfaf7;
+            border-radius: 6px; color: var(--text-main); padding: 8px;
+            font-size: 14px; resize: none; outline: none;
+            line-height: 1.5;
+        }
+
+        /* --- C. 进度模块 --- */
+        #stats-module { flex: 1.5; justify-content: space-between; }
+        .stat-container { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; }
+        .stat-main-num { font-size: 26px; font-weight: bold; color: var(stat-main-num); } 
+        .stat-sub-label { font-size: 11px; color: var(--text-muted); margin-bottom: 5px;}
+        .stat-time { 
+            font-size: 13px; color: #7f8c8d; text-align: center; width: 100%; 
+            border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px; margin-top: 4px;
+        }
+
+        /* --- D. 操作按钮组 --- */
+        #action-module { flex: 1.2; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+        .btn-action {
+            flex: 1; border: none; border-radius: 8px; cursor: pointer;
+            color: white; font-weight: bold; font-size: 15px;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-new { background-color: var(--accent-new); color: #4a3728; }
+        .btn-open { background-color: var(--accent-open); }
+        .btn-save { background-color: var(--accent-save); }
+        .btn-action:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .btn-action:disabled { background-color: #bdc3c7 !important; cursor: not-allowed; opacity: 0.6; transform: none; box-shadow: none; }
+
+/* --- 设置模态框 (升级版：支持长内容滚动) --- */
+
+.modal { 
+    display: none; /* 由 JS 控制显示/隐藏 */
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.6); 
+    backdrop-filter: blur(4px); 
+    
+    /* 【新增】：使用 Flex 布局让内容在屏幕中完美居中 */
+    align-items: center;
+    justify-content: center;
+}
+
+/* 当 JS 设置 display = 'block' 时，为了配合上面的 flex 居中，
+   我们需要确保它表现得像一个 flex 容器 */
+.modal[style*="display: block"] {
+    display: flex !important;
+}
+
+.modal-content { 
+    background: var(--bg-paper); 
+    padding: 30px; 
+    width: 90%; 
+    max-width: 1000px; 
+    border-radius: 20px; 
+    color: var(--text-main); 
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4); 
+
+    /* 【关键】：限制模态框最大高度为屏幕的 90%，并使用 Flex 列布局 */
+    max-height: 90vh; 
+    display: flex;
+    flex-direction: column; 
+}
+
+/* --- 标题部分 (固定) --- */
+.modal-content h2 {
+    margin-top: 0;
+    flex-shrink: 0; /* 【关键】：禁止标题被压缩 */
+}
+
+/* --- 中间内容区域 (可滚动) --- */
+.settings-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1.5fr 1fr; 
+    gap: 30px; 
+    
+    /* 【关键】：核心滚动逻辑 */
+    flex-grow: 1;       /* 自动占据标题和按钮之间的所有剩余空间 */
+    overflow-y: auto;    /* 内容超出时显示垂直滚动条 */
+    overflow-x: hidden;  /* 禁止水平滚动 */
+    padding-right: 15px; /* 为滚动条留出呼吸空间，防止遮挡内容 */
+}
+
+/* --- 底部按钮区域 (固定) --- */
+.modal-actions { 
+    text-align: right; 
+    margin-top: 20px; 
+    padding-top: 15px; 
+    border-top: 1px solid #ddd; 
+    
+    flex-shrink: 0;     /* 【关键】：禁止按钮区域被压缩 */
+}
+
+/* 自定义滚动条样式 (让它更符合你的温暖风格) */
+.settings-grid::-webkit-scrollbar {
+    width: 6px;
+}
+.settings-grid::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.05);
+    border-radius: 10px;
+}
+.settings-grid::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+.settings-grid::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+
+/* 优化一下 section 的间距，让内容在滚动时看起来更自然 */
+section {
+    padding-bottom: 10px;
+}
+
+
+        section h3 { border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-top: 0; font-size: 18px; }
+        label { display: block; margin: 15px 0 5px 0; font-size: 14px; color: var(--text-muted); font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+
+        /* 色块样式 */
+        .swatch-container { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+        .swatch { width: 30px; height: 20px; border-radius: 6px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; position: relative; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); }
+        .swatch.active { border-color: var(--text-main); transform: scale(1.15); z-index: 2; }
+        .custom-trigger { width: 28px; height: 28px; border-radius: 6px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; background: #fff; }
+
+        .theme-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .preset-btn { padding: 6px 12px; border: 1px solid #ccc; background: white; border-radius: 15px; cursor: pointer; font-size: 12px; transition: all 0.2s; }
+/* --- 【进阶版】标签式悬浮预览组件 --- */
+
+
+#settings-preview-canvas { 
+    display: block; 
+    border: 3px solid #ffffff; 
+    border-radius: 8px; 
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+                0 10px 10px -5px rgba(0, 0, 0, 0.1); /* 更深邃的投影 */
+    background: white; 
+}
+/* --- 设置模态框内部的布局优化 --- */
+
+/* 每个设置项的容器：强制它们之间有间距，且垂直排列 */
+.setting-group {
+    margin-bottom: 20px; /* 控制每个设置项之间的距离 */
+    display: flex;
+    flex-direction: column; /* 强制标签和输入框上下排列 */
+    align-items: flex-start;
+}
+
+/* 统一 label 的样式，确保它们是块级元素 */
+section label {
+    display: block;       /* 让 label 占据整行 */
+    margin: 0 0 8px 0;    /* 减小原本过大的 margin，改用 setting-group 控制间距 */
+    font-size: 14px; 
+    color: var(--text-muted); 
+    font-weight: bold;
+}
+
+/* 让 input (除了 color 和 range) 占满宽度 */
+section input[type="number"],
+section input[type="text"],
+section select,
+section textarea {
+    width: 100%;
+    display: block;
+}
+
+/* 特殊处理：分割线粗细的 slider */
+section input[type="range"] {
+    width: 100%;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* 预览区的包裹容器，确保它不会乱跑 */
+.preview-wrapper {
+    margin-top: 10px;
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.preview-container { 
+    margin: 0 auto;
+    position: relative;
+    display: block; /* 从 inline-block 改为 block */
+}
+
+/* 原有的 preview-container span 保持不变，但确保其定位正确 */
+.preview-container span {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px !important;
+    color: #64748b !important;
+    white-space: nowrap;
+}
+
+
+
+        .btn-save-modal { background: var(--accent-save); color: white; padding: 10px 30px; border: none; cursor: pointer; border-radius: 8px; font-weight: bold; }
+        .btn-cancel-modal { background: #e74c3e; color: white; padding: 10px 30px; border: none; cursor: pointer; border-radius: 8px; font-weight: bold; margin-right: 10px;}
+        .hidden-color-input { position: absolute; opacity: 0; width: 0; height: 0; }
+        .hidden { display: none !important; }
+
+
+        /* 数字化工具专用样式 */
+#digitizer-workspace {
+    border: 1px solid var(--border-color);
+}
+
+#digitizer-status {
+    padding: 8px;
+    background: #f1f5f9;
+    border-radius: 6px;
+    font-family: monospace; /* 使用等宽字体，看起来更有“处理中”的感觉 */
+}
+
+/* --- 图片预览容器优化 (解决扁平问题) --- */
+#image-preview-container {
+    width: 100%;
+    min-height: 180px;         /* 【关键】：给一个最小高度，防止塌陷 */
+    display: flex;             /* 使用 Flex 布局 */
+    align-items: center;       /* 垂直居中 */
+    justify-content: center;    /* 水平居中 */
+    border: 2px dashed var(--border-color); /* 【关键】：使用虚线边框，营造“上传区”的感觉 */
+    border-radius: 12px;       /* 圆角 */
+    background-color: rgba(0, 0, 0, 0.03); /* 给一个极浅的背景色，增加层次感 */
+    position: relative;        /* 为内部元素定位提供基准 */
+    overflow: hidden;          /* 防止图片超出圆角边框 */
+    margin-bottom: 15px;       /* 与下方按钮保持间距 */
+}
+
+/* 预览占位文字样式 */
+#image-preview-container span,
+#smart-preview-placeholder {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* 图片显示时的样式优化 */
+#image-preview-img,
+#smart-image-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;      /* 【关键】：保持图片比例，既不拉伸也不裁剪，完整显示在框内 */
+    display: block;
+}
+
+
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+
+<!-- 🔝 Top Bar -->
+<header id="top-bar">
+    <!-- 1. 左侧组 (Left) -->
+    <div class="tool-subgroup">
+        <button class="top-btn" onclick="openSettings()" data-i18n="btn_proj_settings">⚙️ Project Settings</button>           
+        <button class="top-btn" onclick="openSystemSettings()" style="background: #34495e; color: white;" data-i18n="btn_sys_prefs">🛠️ System Preferences</button>
+    </div>
+
+    <!-- 2. 中间组 (Center) -->
+    <div class="tool-subgroup digitizer-group">
+        <button id="btn-digitize" class="top-btn" onclick="openDigitizerModal()" style="background: #9b59b6; color: white;" data-i18n="btn_digitize">📸 Image to Excel</button>
+        <button id="btn-smart-digitize" class="top-btn" onclick="openSmartDigitizerModal()" style="background: #2c3e50; color: white;" data-i18n="btn_smart_digitize">💡 Smart Digitizer</button>
+    </div>
+
+    <!-- 3. 右侧组 (Right) -->
+    <div class="top-actions-group">
+        <button id="btn-new" class="top-btn" onclick="createNewProject()" style="background: var(--accent-new); color: #4a3728;" data-i18n="btn_new">✨ New</button>
+        <button id="btn-import" class="top-btn" onclick="importExcel()" style="background: var(--accent-import); color: white;" data-i18n="btn_import">📥 Import Excel</button>
+    </div>
+</header>
+
+
+<!-- 🖼️ Main Workspace -->
+<main id="canvas-container">
+    <canvas id="mainCanvas"></canvas>
+    <div id="minimap-container">
+        <div id="minimap-content-wrapper">
+            <canvas id="minimap-canvas"></canvas>
+            <div id="minimap-view-rect"></div>
+        </div>
+    </div>
+</main>
+
+<!-- 🛠️ Modular HUD -->
+<footer id="hud">
+    <div id="emoji-module" class="hud-module">
+        <span class="card-label" data-i18n="label_emoji">Emoji Library</span>
+        <div id="emoji-palette"></div>
+    </div>
+    <div id="notes-module" class="hud-module">
+        <span class="card-label" data-i18n="label_notes">Project Notes</span>
+        <textarea id="project-notes" data-i18n-placeholder="placeholder_notes" placeholder="Enter your notes..."></textarea>
+    </div>
+    <div id="stats-module" class="hud-module">
+        <span class="card-label" data-i18n="label_stats">Current Progress</span>
+        <div class="stat-container">
+            <span id="progress-val" class="stat-main-num">0 / 0</span>
+            <span class="stat-sub-label" data-i18n="label_rows_done">Rows Completed</span>
+        </div>
+        <div id="time-val" class="stat-time">--:-- -- --</div>
+    </div>
+    <div id="action-module" class="hud-module">
+        <button id="btn-open" class="btn-action btn-open" onclick="loadProject()" data-i18n="btn_open">📂 Open</button>
+        <button id="btn-save" class="btn-action btn-save" onclick="saveProject()" data-i18n="btn_save">💾 Save</button>
+    </div>
+</footer>
+
+<!-- Hidden Stats -->
+<div id="coord-val" class="hidden">R0, C0</div>
+<div id="dir-val" class="hidden">L → R</div>
+<div id="group-val" class="hidden">1 / 25</div>
+
+<!-- Settings Modal -->
+<div id="settings-modal" class="modal">
+    <div class="modal-content">
+        <h2 data-i18n="modal_title_proj">⚙️ Project Settings</h2>
+        <div class="settings-grid">
+            <section>
+                <h3 data-i18n="sec_display_logic">📐 Display & Logic</h3>
+                <label><span data-i18n="label_view_cols">View Columns</span> <input type="number" id="set-viewCols"></label>
+                <label><span data-i18n="label_view_rows">View Rows</span> <input type="number" id="set-viewRows"></label>
+                <label><span data-i18n="label_group_size">Group Size</span> <input type="number" id="set-groupSize"></label>
+                <label><span data-i18n="label_cell_size">Cell Size</span> <input type="number" id="set-cellSize"></label>
+                <label><span data-i18n="label_first_dir">First Row Direction</span> 
+                    <select id="set-firstDir">
+                        <option value="1" data-i18n="opt_dir_ltr">Left → Right</option>
+                        <option value="-1" data-i18n="opt_dir_rtl">Right ← Left</option>
+                    </select>
+                </label>
+                <label><span data-i18n="label_minimap_w">Minimap Width</span> <input type="number" id="set-miniW"></label>
+                <label><span data-i18n="label_minimap_h">Minimap Height</span> <input type="number" id="set-miniH"></label>
+            </section>
+
+            <section>
+                <h3 data-i18n="sec_appearance">🎨 Appearance</h3>
+                <div class="setting-group">
+                    <label data-i18n="label_theme_preset">Theme Presets:</label>
+                    <div class="theme-presets">
+                        <button type="button" onclick="applyTheme('minimalist')" class="preset-btn" data-i18n="theme_minimalist">📄 Minimalist</button>
+                        <button type="button" onclick="applyTheme('nordic')" class="preset-btn" data-i18n="theme_nordic">❄️ Nordic</button>
+                        <button type="button" onclick="applyTheme('lavender')" class="preset-btn" data-i18n="theme_lavender">💜 Lavender</button>
+                        <button type="button" onclick="applyTheme('nature')" class="preset-btn" data-i18n="theme_nature">🍃 Nature</button>
+                        <button type="button" onclick="applyTheme('retro')" class="preset-btn" data-i18n="theme_retro">🧶 Retro</button>
+                        <button type="button" onclick="applyTheme('sunset')" class="preset-btn" data-i18n="theme_sunset">🌅 Sunset</button>
+                        <button type="button" onclick="applyTheme('dark')" class="preset-btn" data-i18n="theme_dark">🌑 Dark</button>
+                        <button type="button" onclick="applyTheme('forestDark')" class="preset-btn" data-i18n="theme_forestDark">🌲 Forest</button>
+                        <button type="button" onclick="applyTheme('cyber')" class="preset-btn" data-i18n="theme_cyber">⚡ Cyber</button>
+                        <button type="button" onclick="applyRandomColors()" class="preset-btn btn-random" data-i18n="label_random_color">🎲 Random</button>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label data-i18n="label_bg_color">Background Color:</label>
+                    <div id="bg-swatches" class="swatch-container"></div>
+                    <input type="color" id="set-bgCol" class="hidden-color-input" oninput="updatePreview()">
+                </div>
+                <div class="setting-group">
+                    <label data-i18n="label_div_color">Divider Color:</label>
+                    <div id="div-swatches" class="swatch-container"></div>
+                    <input type="color" id="set-divCol" class="hidden-color-input" oninput="updatePreview()">
+                </div>
+                <div class="setting-group">
+                    <label data-i18n="label_div_width">Divider Width</label>
+                    <input type="range" id="set-divWidth" min="1" max="5" oninput="updatePreview()">
+                </div>
+                <div class="setting-group">
+                    <label data-i18n="label_comp_color">Completion Base Color:</label>
+                    <div id="comp-swatches" class="swatch-container"></div>
+                    <input type="color" id="set-compCol" class="hidden-color-input" oninput="updatePreview()">
+                </div>
+                <div class="preview-wrapper">
+                    <div class="preview-container">
+                        <span data-i18n="label_preview">Live Preview:</span>
+                        <canvas id="settings-preview-canvas" width="100" height="60"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3 data-i18n="sec_emoji">✨ Emoji Library</h3>
+                <p style="font-size: 12px; color: #95a5a6;" data-i18n="hint_emoji">(Comma separated)</p>
+                <textarea id="set-emojis" rows="8"></textarea>
+            </section>
+        </div>
+        <div class="modal-actions">
+            <button onclick="closeSettings()" class="btn-cancel-modal" data-i18n="btn_cancel">Cancel</button>
+            <button onclick="applySettings()" class="btn-save-modal" data-i18n="btn_apply_save">Apply & Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- Digitizer Modal -->
+<div id="digitizer-modal" class="modal">
+    <div class="modal-content">
+        <h2 data-i18n="modal_title_digitize">📸 Image to Excel Tool</h2>
+        <p style="color: var(--text-muted); font-size: 14px;" data-i18n="desc_digitize">Upload a clear pattern image, and the system will automatically detect the grid and convert it into an editable Excel file.</p>
+        <div id="digitizer-workspace">
+            <div id="image-preview-container">
+                <span id="preview-placeholder" data-i18n="text_no_image">No image selected</span>
+                <img id="image-preview-img" style="max-width: 100%; max-height: 200px; display: none; border-radius: 4px;" />
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="btn-select-img" class="btn-action btn-open" style="flex: 1;" data-i18n="btn_select_img">📂 Select Image</button>
+                <button id="btn-start-process" class="btn-action btn-save" style="flex: 1; opacity: 0.5;" disabled data-i18n="btn_start_process">⚡ Start Conversion</button>
+            </div>
+            <div id="digitizer-status" data-i18n="status_ready">Ready</div>
+        </div>
+        <div class="modal-actions">
+            <button onclick="closeDigitizerModal()" class="btn-cancel-modal" data-i18n="btn_cancel">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Smart Digitizer Modal -->
+<div id="smart-digitizer-modal" class="modal">
+    <div class="modal-content">
+        <h2 data-i18n="modal_title_smart">💡 Smart Digitizer</h2>
+        <p style="color: var(--text-muted); font-size: 14px;" data-i18n="desc_smart">Suitable for blurry, irregular, or patterned images. Crop the image to just the grid area before uploading.</p>
+        <div id="smart-digitizer-workspace" style="display: flex; flex-direction: column; gap: 20px; padding: 20px; background: #f8fafc; border-radius: 12px;">
+            <div id="image-preview-container">
+                <span id="smart-preview-placeholder" data-i18n="text_no_image">No image selected</span>
+                <img id="smart-image-preview-img" style="max-width: 100%; max-height: 200px; display: none; border-radius: 4px;" />
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label><span data-i18n="label_smart_rows">Pattern Rows</span> <input type="number" id="smart-input-rows" placeholder="e.g. 30" min="1"></label>
+                </div>
+                <div>
+                    <label><span data-i18n="label_smart_cols">Pattern Cols</span> <input type="number" id="smart-input-cols" placeholder="e.g. 40" min="1"></label>
+                </div>
+            </div>
+            <div style="grid-column: span 2; margin-top: 10px;">
+                <label data-i18n="label_smart_threshold">Conversion Sensitivity</label>
+                <input type="number" id="smart-threshold-input" min="0" max="255" value="160">
+                <p style="font-size: 10px; color: #94a3b8; margin-top: 4px;" data-i18n="hint_smart_threshold">(0=Very sensitive | 255=Not sensitive)</p>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="btn-smart-select-img" class="btn-action btn-open" style="flex: 1;" data-i18n="btn_smart_select_img">📂 Select Image</button>
+                <button id="btn-smart-start" class="btn-action btn-save" style="flex: 1; opacity: 0.5;" disabled data-i18n="btn_smart_start">⚡ Start Smart Conversion</button>
+            </div>
+            <div id="smart-digitizer-status" data-i18n="status_ready">Ready</div>
+        </div>
+        <div class="modal-actions">
+            <button onclick="closeSmartDigitizerModal()" class="btn-cancel-modal" data-i18n="btn_cancel">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- System Settings Modal -->
+<div id="system-settings-modal" class="modal">
+    <div class="modal-content">
+        <h2 data-i18n="modal_title_sys">🛠️ System Preferences</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;" data-i18n="desc_sys_prefs">These settings determine the initial state when creating a new project.</p>
+        <div class="settings-grid">
+            <section>
+                <h3 data-i18n="sec_canvas_defaults">📐 Default Canvas</h3>
+                <label><span data-i18n="label_sys_view_cols">Default View Columns</span> <input type="number" id="sys-viewCols"></label>
+                <label><span data-i18n="label_sys_view_rows">Default View Rows</span> <input type="number" id="sys-viewRows"></label>
+                <label><span data-i18n="label_sys_cell_size">Default Cell Size</span> <input type="number" id="sys-cellSize"></label>
+                <label><span data-i18n="label_sys_group_size">Default Group Size</span> <input type="number" id="sys-groupSize"></label>
+            </section>
+            <section>
+                <h3 data-i18n="sec_lang_content">🌍 Language & Content</h3>
+                <label><span data-i18n="label_sys_lang">Default Interface Language</span>
+                    <select id="sys-lang">
+                        <option value="en-US">English</option>
+                        <option value="zh-CN">简体中文</option>
+                        <option value="zh-HK">繁體中文</option>
+                        <option value="de-DE">Deutsch</option>
+                        <option value="fr-FR">Français</option>
+                        <option value="es-ES">Español</option>
+                        <option value="ru-RU">Русский</option>
+                        <option value="ja-JP">日本語</option>
+
+                    </select>
+                </label>
+                <label><span data-i18n="label_sys_emojis">Default Emoji List (comma separated)</span>
+                    <textarea id="sys-emojis" rows="4"></textarea>
+                </label>
+            </section>
+        </div>
+        <div class="modal-actions">
+            <button onclick="closeSystemSettings()" class="btn-cancel-modal" data-i18n="btn_cancel">Cancel</button>
+            <button onclick="saveSystemSettings()" class="btn-save-modal" data-i18n="btn_apply_save">Apply & Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="i18n.js"></script> 
+<script src="renderer.js"></script>
+</body>
+</html>

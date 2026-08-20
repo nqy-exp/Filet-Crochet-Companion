@@ -1,0 +1,30 @@
+# --- 依赖包 (绝对不能上传) ---
+node_modules/
+
+# --- 构建产物 (打包后的程序，不要传到代码仓库) ---
+dist/
+out/
+build/
+release/
+*.dmg
+*.app
+
+# --- 日志文件 ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- 操作系统产生的垃圾文件 ---
+.DS_Store
+Thumbs.db
+
+# --- 编辑器配置 (可选，建议忽略以保持仓库纯净) ---
+.vscode/
+.idea/
+
+# --- 环境变量/敏感信息 (如果有的话，绝对不能传) ---
+.env
+*.env
+
+

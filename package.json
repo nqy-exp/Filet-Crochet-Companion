@@ -1,0 +1,36 @@
+{
+  "name": "filet-crochet-companion",
+  "version": "1.0.0-beta",
+  "description": "Filet Lace Crochet Companion",
+  "main": "main.js",
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "electron": "^43.4.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.qy_niu.filetlace",
+    "productName": "Filet Crochet Companion（beta）",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg"
+      ]
+    },
+    "files": [
+      "**/*",
+      "!node_modules/*/{CHANGELOG.md,README.md,test,examples,docs}",
+      "!node_modules/.bin"
+    ],
+    "extraResources": [
+      "digitizer.py",
+      "smart_digitizer.py"
+    ]
+  },
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  }
+}
