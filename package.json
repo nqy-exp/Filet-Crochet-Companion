@@ -2,6 +2,7 @@
   "name": "filet-crochet-companion",
   "version": "1.0.0-beta",
   "description": "Filet Lace Crochet Companion",
+  "author": "QY Niu", 
   "main": "main.js",
   "dependencies": {
     "exceljs": "^4.4.0"
