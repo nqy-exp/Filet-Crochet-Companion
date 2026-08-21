@@ -99,7 +99,24 @@ const i18nData = {
         'alert_critical_error': '程序发生严重错误，请检查控制台日志。',
         'alert_sys_settings_saved': '系统默认设置已保存！下次新建项目将生效。',
         'alert_sys_save_fail': '保存失败: ',
-        'confirm_new_project': '⚠️ 当前项目尚未保存，新建操作将导致当前进度丢失。是否确认新建？'
+        'confirm_new_project': '⚠️ 当前项目尚未保存，新建操作将导致当前进度丢失。是否确认新建？',
+        // --- About & Help ---
+'btn_about': 'ⓘ',
+'modal_title_about': '📖 关于',
+'sec_instructions_intro': '操作指南：',
+'help_key_arrows': '方向键',
+'help_val_arrows': '移动视图 / 光标',
+'help_key_leftclick': '左键单击',
+'help_val_leftclick': '完成当前格子',
+'help_key_doubleclick': '鼠标双击',
+'help_val_doubleclick': '撤销当前行进度',
+'help_key_rightclick': '右键点击',
+'help_val_rightclick': '添加/移除 Emoji 标记',
+'help_key_drag': 'Emoji 拖拽',
+'help_val_drag': '将图标直接拖入格子中',
+'sec_credits_title': '鸣谢:',
+'btn_got_it': '知道了',
+
     },
     'en-US': {
         // --- Top Bar ---
@@ -199,7 +216,24 @@ const i18nData = {
         'alert_critical_error': 'A critical error occurred, please check the console logs.',
         'alert_sys_settings_saved': 'System default settings saved! Will take effect on next new project.',
         'alert_sys_save_fail': 'Save failed: ',
-        'confirm_new_project': '⚠️ Current project is not saved. New project will cause loss of progress. Confirm?'
+        'confirm_new_project': '⚠️ Current project is not saved. New project will cause loss of progress. Confirm?',
+        // --- About & Help ---
+'btn_about': 'ⓘ',
+'modal_title_about': '📖 About',
+'sec_instructions_intro': 'Usage Guide:',
+'help_key_arrows': 'Direction Keys',
+'help_val_arrows': 'Move view / Cursor',
+'help_key_leftclick': 'Left Click',
+'help_val_leftclick': 'Fill current cell',
+'help_key_doubleclick': 'Double Click',
+'help_val_doubleclick': 'Undo row progress',
+'help_key_rightclick': 'Right Click',
+'help_val_rightclick': 'Add/Remove Emoji',
+'help_key_drag': 'Emoji Drag',
+'help_val_drag': 'Drag icon into cell',
+'sec_credits_title': 'Credits:',
+'btn_got_it': 'Got it',
+
     },
         'de-DE': {
         // --- Top Bar ---
@@ -299,7 +333,24 @@ const i18nData = {
         'alert_critical_error': 'Kritischer Fehler! Log prüfen.',
         'alert_sys_settings_saved': 'System-Einstellungen gespeichert!',
         'alert_sys_save_fail': 'Fehler beim Speichern: ',
-        'confirm_new_project': '⚠️ Ungespeicherte Änderungen gehen verloren. Fortfahren?'
+        'confirm_new_project': '⚠️ Ungespeicherte Änderungen gehen verloren. Fortfahren?',
+        // --- About & Help ---
+'btn_about': 'ⓘ',
+'modal_title_about': '📖 Info',
+'sec_instructions_intro': 'Bedienungsanleitung:',
+'help_key_arrows': 'Pfeiltasten',
+'help_val_arrows': 'Ansicht / Cursor bewegen',
+'help_key_leftclick': 'Linksklick',
+'help_val_leftclick': 'Zelle füllen',
+'help_key_doubleclick': 'Doppelklick',
+'help_val_doubleclick': 'Zeilenfortschritt rückgängig machen',
+'help_key_rightclick': 'Rechtsklick',
+'help_val_rightclick': 'Emoji hinzufügen/entfernen',
+'help_key_drag': 'Emoji ziehen',
+'help_val_drag': 'Icon in Zelle ziehen',
+'sec_credits_title': 'Danksagung:',
+'btn_got_it': 'Verstanden',
+
     },
 
     'fr-FR': {
@@ -400,7 +451,24 @@ const i18nData = {
         'alert_critical_error': 'Erreur critique! Voir console.',
         'alert_sys_settings_saved': 'Paramètres système sauvegardés!',
         'alert_sys_save_fail': 'Échec sauvegarde: ',
-        'confirm_new_project': '⚠️ Non enregistré. Perdre les progrès? Confirmer?'
+        'confirm_new_project': '⚠️ Non enregistré. Perdre les progrès? Confirmer?',
+        // --- About & Help ---
+'btn_about': 'ⓘ',
+'modal_title_about': '📖 À propos',
+'sec_instructions_intro': 'Guide d\'utilisation :',
+'help_key_arrows': 'Touches direction',
+'help_val_arrows': 'Déplacer la vue / curseur',
+'help_key_leftclick': 'Clic gauche',
+'help_val_leftclick': 'Remplir la cellule',
+'help_key_doubleclick': 'Double clic',
+'help_val_doubleclick': 'Annuler la progression de la ligne',
+'help_key_rightclick': 'Clic droit',
+'help_val_rightclick': 'Ajouter/Retirer un Emoji',
+'help_key_drag': 'Glisser l\'emoji',
+'help_val_drag': 'Faire glisser l\'icône dans la cellule',
+'sec_credits_title': 'Remerciements :',
+'btn_got_it': 'Compris',
+
     },
 
     'es-ES': {
@@ -501,7 +569,24 @@ const i18nData = {
         'alert_critical_error': 'Error crítico! Ver logs.',
         'alert_sys_settings_saved': 'Ajustes guardados!',
         'alert_sys_save_fail': 'Error al guardar: ',
-        'confirm_new_project': '⚠️ Proyecto no guardado. ¿Perder progreso? Confirmar?'
+        'confirm_new_project': '⚠️ Proyecto no guardado. ¿Perder progreso? Confirmar?',
+        // --- About & Help ---
+'btn_about': 'ⓘ',
+'modal_title_about': '📖 Acerca de',
+'sec_instructions_intro': 'Guía de uso:',
+'help_key_arrows': 'Teclas de dirección',
+'help_val_arrows': 'Mover vista / cursor',
+'help_key_leftclick': 'Clic izquierdo',
+'help_val_leftclick': 'Rellenar celda actual',
+'help_key_doubleclick': 'Doble clic',
+'help_val_doubleclick': 'Deshacer progreso de fila',
+'help_key_rightclick': 'Clic derecho',
+'help_val_rightclick': 'Añadir/Quitar Emoji',
+'help_key_drag': 'Arrastrar Emoji',
+'help_val_drag': 'Arrastrar icono a la celda',
+'sec_credits_title': 'Créditos:',
+'btn_got_it': 'Entendido',
+
     },
 
     'ru-RU': {
@@ -602,7 +687,24 @@ const i18nData = {
         'alert_critical_error': 'Критическая ошибка! Проверьте лог.',
         'alert_sys_settings_saved': 'Настройки сохранены!',
         'alert_sys_save_fail': 'Ошибка сохранения: ',
-        'confirm_new_project': '⚠️ Не сохранено. Потерять прогресс? Да?'
+        'confirm_new_project': '⚠️ Не сохранено. Потерять прогресс? Да?',
+        // --- About & Help ---
+'btn_about': 'ⓘ',
+'modal_title_about': '📖 О программе',
+'sec_instructions_intro': 'Инструкция:',
+'help_key_arrows': 'Стрелки',
+'help_val_arrows': 'Перемещение / курсор',
+'help_key_leftclick': 'Левый клик',
+'help_val_leftclick': 'Заполнить ячейку',
+'help_key_doubleclick': 'Двойной клик',
+'help_val_doubleclick': 'Отменить прогресс строки',
+'help_key_rightclick': 'Правый клик',
+'help_val_rightclick': 'Добавить/удалить Emoji',
+'help_key_drag': 'Перетаскивание Emoji',
+'help_val_drag': 'Перетащить иконку в ячейку',
+'sec_credits_title': 'Благодарности:',
+'btn_got_it': 'Понятно',
+
     },
 
     'ja-JP': {
@@ -703,7 +805,24 @@ const i18nData = {
         'alert_critical_error': '重大なエラーが発生しました。ログを確認してください。',
         'alert_sys_settings_saved': 'システム設定が保存されました!',
         'alert_sys_save_fail': '保存失敗: ',
-        'confirm_new_project': '⚠️ 未保存の変更があります。続行しますか？'
+        'confirm_new_project': '⚠️ 未保存の変更があります。続行しますか？',
+        // --- About & Help ---
+'btn_about': 'ⓘ',
+'modal_title_about': '📖 アバウト',
+'sec_instructions_intro': '操作ガイド:',
+'help_key_arrows': '方向キー',
+'help_val_arrows': '表示の移動 / カーソル',
+'help_key_leftclick': '左クリック',
+'help_val_leftclick': 'セルを塗りつぶす',
+'help_key_doubleclick': 'ダブルクリック',
+'help_val_doubleclick': '行の進捗を戻す',
+'help_key_rightclick': '右クリック',
+'help_val_rightclick': '絵文字を追加/削除',
+'help_key_drag': '絵文字のドラッグ',
+'help_val_drag': 'アイコンをセルにドラッグ',
+'sec_credits_title': 'クレジット:',
+'btn_got_it': '了解',
+
     },
         'zh-HK': {
         // --- Top Bar ---
@@ -803,7 +922,24 @@ const i18nData = {
         'alert_critical_error': '程式發生嚴重錯誤，請檢查控制台日誌。',
         'alert_sys_settings_saved': '系統預設設定已儲存！下次新建項目將生效。',
         'alert_sys_save_fail': '儲存失敗: ',
-        'confirm_new_project': '⚠️ 目前項目尚未儲存，新建操作將導致目前進度遺失。是否確認新建？'
+        'confirm_new_project': '⚠️ 目前項目尚未儲存，新建操作將導致目前進度遺失。是否確認新建？',
+        // --- About & Help ---
+'btn_about': 'ⓘ',
+'modal_title_about': '📖 關於',
+'sec_instructions_intro': '操作指南：',
+'help_key_arrows': '方向鍵',
+'help_val_arrows': '移動視圖 / 光標',
+'help_key_leftclick': '左鍵點擊',
+'help_val_leftclick': '完成當前格子',
+'help_key_doubleclick': '滑鼠雙擊',
+'help_val_doubleclick': '撤銷當前行進度',
+'help_key_rightclick': '右鍵點擊',
+'help_val_rightclick': '添加/移除 Emoji 標記',
+'help_key_drag': 'Emoji 拖拽',
+'help_val_drag': '將圖標直接拖入格子中',
+'sec_credits_title': '鳴謝:',
+'btn_got_it': '知道了',
+
     },
 
 

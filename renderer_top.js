@@ -1638,7 +1638,13 @@ async function saveSystemSettings() {
 }
 
 
+window.openHelpModal = function() {
+    document.getElementById('help-modal').style.display = 'block';
+};
 
+window.closeHelpModal = function() {
+    document.getElementById('help-modal').style.display = 'none';
+};
 
 
 // Global exposures

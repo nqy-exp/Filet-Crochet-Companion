@@ -464,6 +464,53 @@ section input[type="range"] {
     display: block;
 }
 
+/* 顶部栏的纯图标触发器 */
+.help-trigger {
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 10px;
+    user-select: none;
+    transition: transform 0.2s ease;
+    display: inline-block;
+    line-height: 40px; /* 与 top-bar 高度对齐 */
+}
+
+.help-trigger:hover {
+    transform: scale(1.2); /* 悬停时轻微放大，增加交互感 */
+}
+
+/* 极简帮助列表样式 */
+.help-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* 行与行之间的呼吸感 */
+}
+
+.help-row {
+    display: flex;
+    align-items: baseline;
+    font-size: 15px;
+    color: var(--text-main);
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #e0e0e0; /* 使用极淡的虚线分隔，增加阅读引导 */
+}
+
+.help-row:last-child {
+    border-bottom: none; /* 最后一行不需要分割线 */
+}
+
+.help-row strong {
+    font-weight: 700;
+    min-width: 100px; /* 固定宽度，让后面的描述对齐，看起来不乱 */
+    color: var(--text-main);
+}
+
+.help-row span {
+    color: var(--text-muted);
+    margin-left: 8px;
+}
+
+
 
     </style>
 </head>
@@ -486,6 +533,8 @@ section input[type="range"] {
 
     <!-- 3. 右侧组 (Right) -->
     <div class="top-actions-group">
+        <span class="help-trigger" onclick="openHelpModal()" title="About & Help" data-i18n="btn_about">ⓘ</span>
+
         <button id="btn-new" class="top-btn" onclick="createNewProject()" style="background: var(--accent-new); color: #4a3728;" data-i18n="btn_new">✨ New</button>
         <button id="btn-import" class="top-btn" onclick="importExcel()" style="background: var(--accent-import); color: white;" data-i18n="btn_import">📥 Import Excel</button>
     </div>
@@ -706,7 +755,41 @@ section input[type="range"] {
         </div>
     </div>
 </div>
+<!-- About & Help Modal (Combined Version) -->
+<div id="help-modal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <h2 data-i18n="modal_title_about">📖 About & Help</h2>
+        
+        <!-- Section 1: Instructions -->
+        <div class="help-section">
+            <p data-i18n="sec_instructions_intro" style="color: var(--text-muted); margin-bottom: 15px; font-size: 14px;"></p>
+            
+            <div class="help-list-container" style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="help-row"><strong data-i18n="help_key_arrows">Direction Keys</strong> <span data-i18n="help_val_arrows">Move view / Cursor</span></div>
+                <div class="help-row"><strong data-i18n="help_key_leftclick">Left Click</strong> <span data-i18n="help_val_leftclick">Fill current cell</span></div>
+                <div class="help-row"><strong data-i18n="help_key_doubleclick">Double Click</strong> <span data-i18n="help_val_doubleclick">Undo current row progress</span></div>
+                <div class="help-row"><strong data-i18n="help_key_rightclick">Right Click</strong> <span data-i18n="help_val_rightclick">Add/Remove Emoji marker</span></div>
+                <div class="help-row"><strong data-i18n="help_key_drag">Emoji Drag</strong> <span data-i18n="help_val_drag">Drag icon into cell</span></div>
+            </div>
+        </div>
 
+        <!-- Section 2: Credits (The Flaticon part) -->
+        <div class="credits-section" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+            <p data-i18n="sec_credits_title" style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px; font-weight: bold; text-transform: uppercase;"></p>
+            <!-- 这里直接放 HTML，因为 i18n 处理包含标签的字符串会有问题 -->
+            <div class="flaticon-attribution" style="font-size: 12px;">
+                <a href="https://www.flaticon.com/free-icons/crochet" title="crochet icons" target="_blank" rel="noopener noreferrer" style="color: var(--accent-open); text-decoration: none;">Crochet icons created by Magnific - Flaticon</a><br>
+                <span style="opacity: 0.8;">URL: https://www.flaticon.com/free-icons/crochet</span>
+            </div>
+        </div>
+<div class="minimal-footer" style="margin-top: auto; padding-top: 20px; text-align: right; font-size: 11px; color: var(--text-muted);">
+    <span>Created by QY Niu✨</span>
+</div>
+        <div class="modal-actions" style="margin-top: 30px;">
+            <button onclick="closeHelpModal()" class="btn-cancel-modal" data-i18n="btn_got_it">Got it</button>
+        </div>
+    </div>
+</div>
 <!-- Scripts -->
 <script src="i18n.js"></script> 
 <script src="renderer.js"></script>

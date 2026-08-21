@@ -23,13 +23,14 @@
       "target": [
         "nsis",
         "portable" 
-      ]
-
+      ],
+      "icon": "assets/icon.ico" 
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
       "createDesktopShortcut": true
     },
 
