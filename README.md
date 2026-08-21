@@ -84,6 +84,7 @@ npm start
 ## 📜 Credits
 
 - **Icons provided by** [Flaticon](https://www.flaticon.com/free-icons/crochet) (Created by Magnific)
+- **Processed via** IconKitchen
 
 ---
 
