@@ -1,4 +1,4 @@
-// This is an alternative version for top-down crochet direction.
+//  This is an alternative version for top-down crochet direction.
 // To use it, rename this file to renderer.js and replace the original.
 let isProjectLoaded = false; 
 let currentFilePath = null; // 用于记录当前打开的文件路径
@@ -1572,7 +1572,7 @@ async function setupSmartDigitizerListeners() {
             startBtn.disabled = true;
             startBtn.style.opacity = 0.5;
 
-            const resultPath = await window.api.runSmartDigitizer(smartSelectedImagePath, rows, cols);
+         const resultPath = await window.api.runSmartDigitizer(smartSelectedImagePath, rows, cols, threshold);
 
             if (resultPath) {
                 status.innerText = window.i18n.t('status_success');
