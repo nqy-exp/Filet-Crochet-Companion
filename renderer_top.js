@@ -819,6 +819,8 @@ async function saveProject() {
         });
 
         if (result && result.success) {
+            currentFilePath = result.path; 
+            console.log("Project successfully saved to:", currentFilePath); 
             const fileName = result.path.split(/[\\/]/).pop();
             window.api.setWindowTitle(`${window.i18n.t('app_title')} --- ${fileName}`);
 
