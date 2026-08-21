@@ -252,7 +252,7 @@ ipcMain.handle('run-smart-digitizer', async (event, { imagePath, rows, cols, thr
 
 
         let pythonExecPath;
-        if (isDevFixed) {
+        if (isDev) {
             pythonExecPath = 'python3';
         } else {
             const venvPath = path.join(process.resourcesPath, 'venv_dist');
@@ -261,7 +261,7 @@ ipcMain.handle('run-smart-digitizer', async (event, { imagePath, rows, cols, thr
                 : path.join(venvPath, 'bin', 'python');
         }
 
-        const scriptPath = isDevFixed 
+        const scriptPath = isDev
             ? path.join(__dirname, 'smart_digitizer.py') 
             : path.join(process.resourcesPath, 'smart_digitizer.py');
 
