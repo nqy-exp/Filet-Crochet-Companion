@@ -6,14 +6,19 @@
 ## 🛠️ What does it do?
 A specialized tool designed to:
 1. **Digitize:** Convert pattern images into Excel files. Supports black-and-white output only.
-2. **Track:** Import existing Excel patterns to track progress and mark motifs directly in the app. Color support.
+2. **Track:** Import existing Excel patterns to track progress and mark motifs directly in the app. Standard Excel colors support.
+
+(Note: Excel theme colors may not be recognized accurately. If you want to use them, please test your palette with a small sample before importing full patterns to avoid unexpected results.)
 
 <img width="1200" height="813" alt="FCC-index" src="https://github.com/user-attachments/assets/829743ee-dca0-47d7-a633-25ea07396edc" />
 
 ### ✨ Key Features
 
 **Crochet Tracking Mode:**
-* **Direction:** Bottom-up (matches my preference). The first row direction is adjustable.
+* **Dynamic Progress Filling (Core Mechanic):** 
+  This tool treats your crochet work as a continuous process. As you complete rows(by left click), the app visually "**fills in**" the completed area behind your current working row. This creates a clear, intuitive boundary between your finished work and the active zone, helping you stay focused.
+  *(Note: The direction of the "fill" match your chosen crochet direction—whether bottom-up or top-down.)*
+* **Direction:** Default Bottom-up (matches my preference). The first row direction is adjustable.
 *For a top-down crochet direction, simply remove renderer.js and rename renderer_top.js to renderer.js after cloning.*
 * **Controls:**
     * `Left Click` $\rightarrow$ Mark as "Done" (with a colored overlay).
@@ -26,7 +31,7 @@ Manual drawing in Excel is tedious, so I built two modes:
 * **Standard Mode:** For clear images. Automatically detects rows and columns to generate an Excel grid.
 * **Blurry Mode:** For blurry or irregular patterns. Just crop the pattern area, input the row/col counts, and it uses brightness sampling to detect the grid—much faster than manual drawing.
 
-*This function only provides black and white patterns. If you require colored patterns, please use another digitizer tool or edit them manually.*
+⚠️ Note: The digitizer currently outputs black-and-white patterns. For colored patterns, please use an external tool or edit the Excel file manually.
 
 ### 🌐 Language Support
 To support more handmade enthusiasts, I've added several languages commonly found in crochet magazines: Simplified Chinese, Traditional Chinese, English, French, German, Spanish, Russian, and Japanese.
@@ -41,14 +46,15 @@ To support more handmade enthusiasts, I've added several languages commonly foun
 3. Track your progress: mark cells as you go.
 4. Don’t forget to save your progress regularly, there’s no auto-save or exit warning.
 
-### 📌 Excel Import Tips
+### 📌  Pro Tips for Excel Import
 
--  After importing, the app will automatically detect the boundary based on the last row and column that contain colored cells.
-- If your pattern needs empty margins, mark four corners of pattern(e.g. use red color fill corner cells) in your Excel sheet to define the area. 
-- Once imported, use the arrow keys to move around and verify that the grid aligns with your pattern.
+- Automatic Detection: The app detects boundaries based on the last non-empty cell (colored or motif).
+- Custom Margins: To define a specific area, mark the four corners of your pattern with a color fill in Excel.
+- Alignment Check: Use the arrow keys to move around and ensure the grid aligns perfectly with your pattern before you start.
 
 
-❗️Attention!: The app does not modify your Excel file or let you edit the grid. All adjustments must be made in Excel ***before importing***. Importing a new Excel file will reset all progress (completed rows, current position, and emoji marks). Please make sure you've saved your work before switching patterns.
+❗️ Attention: The app is a viewer/tracker; it does not modify your original Excel file. All grid adjustments must be made in Excel before importing. Importing a new file will reset all current progress.
+
 ---
 
 ## 🚀 How to run?
@@ -85,6 +91,13 @@ This is a **Beta version**, developed for personal use.
 **License:** [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.html)
 
 ---
+
+### 📦 Beta Status
+
+This app is currently in beta and is being tested through my personal crochet workflow. Official release packages will be provided once the project reaches a stable version.
+
+---
+
 *This README was translated with AI assistance.*
 
-*Last update: 2026.08.20*
+*Last update: 2026.08.21*
