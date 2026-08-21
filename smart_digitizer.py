@@ -116,7 +116,7 @@ class SmartPatternDigitizer:
 # --- Main Entry Point ---
 if __name__ == "__main__":
     import sys
-
+    import tempfile 
     # Argument check (Usage instruction in English)
     if len(sys.argv) < 5:
         print("Usage: python smart_digitizer.py <image_path> <rows> <cols> <threshold>")
@@ -129,7 +129,8 @@ if __name__ == "__main__":
         except ValueError:
             sys.exit(1)
 
-        output_xlsx = os.path.splitext(input_img)[0] + "_smart_pattern.xlsx"
+        base_name = os.path.splitext(os.path.basename(input_img))[0]
+        output_xlsx = os.path.join(tempfile.gettempdir(), base_name + "_smart_pattern.xlsx")
 
         try:
             digitizer = SmartPatternDigitizer(input_img)

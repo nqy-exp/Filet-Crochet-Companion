@@ -160,51 +160,81 @@ ipcMain.handle('open-file-dialog', async (event, options) => {
 });
 
 
-// 调用 Python 处理图片
+// --- 🖼️ 图片转 Excel 工具指令 (Digitizer Tool) ---
+
 ipcMain.handle('run-digitizer', async (event, imagePath) => {
     return new Promise((resolve, reject) => {
         const isDev = !app.isPackaged;
+        let pythonExecPath;
+        if (isDev) {
+            pythonExecPath = 'python3';
+        } else {
+            const venvPath = path.join(process.resourcesPath, 'venv_dist');
+            pythonExecPath = process.platform === 'win32' 
+                ? path.join(venvPath, 'Scripts', 'python.exe') 
+                : path.join(venvPath, 'bin', 'python');
+        }
+
         const scriptPath = isDev 
-        ? path.join(__dirname, 'digitizer.py') 
-        : path.join(process.resourcesPath, 'digitizer.py');
-        const smartScriptPath = isDev 
-           ? path.join(__dirname, 'smart_digitizer.py') 
-           : path.join(process.resourcesPath, 'smart_digitizer.py');
+            ? path.join(__dirname, 'digitizer.py') 
+            : path.join(process.resourcesPath, 'digitizer.py');
 
-
-        const pythonProcess = spawn('python3', [scriptPath, imagePath]);
-
+        const pythonProcess = spawn(pythonExecPath, [scriptPath, imagePath]);
 
         let errorMsg = "";
         pythonProcess.stdout.on('data', (data) => console.log(`Python: ${data}`));
         pythonProcess.stderr.on('data', (data) => { errorMsg += data.toString(); });
 
-
         pythonProcess.on('close', (code) => {
             if (code === 0) {
+                // 【核心修复】：使用 path.basename 确保只提取文件名，不带路径
                 const extension = path.extname(imagePath);
-                const baseName = imagePath.substring(0, imagePath.length - extension.length);
-                resolve(baseName + "_pattern.xlsx"); 
+                const pureFileName = path.basename(imagePath, extension); // 得到 "pixel_art_large (1)"
+                
+                const tempDir = require('os').tmpdir(); 
+                // 现在拼接出来的路径是正确的：/var/folders/.../T/pixel_art_large (1)_pattern.xlsx
+                const fullTempPath = path.join(tempDir, pureFileName + "_pattern.xlsx");
+                
+                resolve(fullTempPath); 
             } else {
-                reject(new Error(errorMsg || "err_python_failed"));
+                reject(new Error(errorMsg || "Python_digitizer_erro"));
             }
         });
     });
 });
 
 
-ipcMain.handle('save-as-path', async (event, defaultPath) => {
+
+
+// --- 修正后的 save-as-path 指令 ---
+ipcMain.handle('save-as-path', async (event, tempFilePath) => {
+    // 1. 从 Python 返回的那个“隐形路径”中，只提取出文件名
+    // 例如：从 "/var/folders/.../my_pattern.xlsx" 提取出 "my_pattern.xlsx"
+    const fileName = path.basename(tempFilePath);
+
+    // 2. 构建一个用户一眼就能看到的、合理的默认路径（例如“下载”文件夹）
+    // 这样对话框打开时，用户看到的就是 Downloads/my_pattern.xlsx
+    const defaultDownloadsPath = path.join(app.getPath('downloads'), fileName);
+
     const result = await dialog.showSaveDialog({
-        defaultPath: defaultPath,
+        defaultPath: defaultDownloadsPath, // <--- 这里是关键：默认指向下载目录 + 文件名
         filters: [{ name: 'Excel Files', extensions: ['xlsx'] }]
     });
+
     return result.filePath; 
 });
 
 
+// --- 移动文件指令 (终极修复版) ---
+
 ipcMain.handle('move-file', async (event, oldPath, newPath) => {
     try {
-        fs.renameSync(oldPath, newPath);
+        const fs = require('fs');
+        if (oldPath === newPath) return true; // 只有路径完全一致才跳过
+
+        // 使用复制+删除，确保能跨分区（从系统临时区到用户下载区）搬家
+        fs.copyFileSync(oldPath, newPath);
+        fs.unlinkSync(oldPath);
         return true;
     } catch (err) {
         console.error("Move error:", err); 
@@ -214,30 +244,45 @@ ipcMain.handle('move-file', async (event, oldPath, newPath) => {
 
 
 
+
 // --- 🛠️ 高级模式 (Smart Digitizer) 指令 ---
 ipcMain.handle('run-smart-digitizer', async (event, { imagePath, rows, cols, threshold }) => {
     return new Promise((resolve, reject) => {
-        const isDev = !app.isPackaged;
-        const scriptPath = isDev 
-        ? path.join(__dirname, 'smart_digitizer.py') 
-        : path.join(process.resourcesPath, 'smart_digitizer.py');
+        const isDev = !app.isPackaged; 
 
 
-        const pythonProcess = spawn('python3', [scriptPath, imagePath, rows.toString(), cols.toString(), threshold.toString()]);
+        let pythonExecPath;
+        if (isDevFixed) {
+            pythonExecPath = 'python3';
+        } else {
+            const venvPath = path.join(process.resourcesPath, 'venv_dist');
+            pythonExecPath = process.platform === 'win32' 
+                ? path.join(venvPath, 'Scripts', 'python.exe') 
+                : path.join(venvPath, 'bin', 'python');
+        }
 
+        const scriptPath = isDevFixed 
+            ? path.join(__dirname, 'smart_digitizer.py') 
+            : path.join(process.resourcesPath, 'smart_digitizer.py');
+
+        const pythonProcess = spawn(pythonExecPath, [scriptPath, imagePath, rows.toString(), cols.toString(), threshold.toString()]);
 
         let errorMsg = "";
         pythonProcess.stdout.on('data', (data) => console.log(`Smart-Digitizer: ${data}`));
         pythonProcess.stderr.on('data', (data) => { errorMsg += data.toString(); });
 
-
         pythonProcess.on('close', (code) => {
             if (code === 0) {
+                // 【核心修复】：使用 path.basename 确保只提取文件名，不带路径
                 const extension = path.extname(imagePath);
-                const baseName = imagePath.substring(0, imagePath.length - extension.length);
-                resolve(baseName + "_smart_pattern.xlsx"); 
+                const pureFileName = path.basename(imagePath, extension); 
+                
+                const tempDir = require('os').tmpdir(); 
+                const fullTempPath = path.join(tempDir, pureFileName + "_smart_pattern.xlsx");
+
+                resolve(fullTempPath); 
             } else {
-                reject(new Error(errorMsg || "err_smart_python_failed"));
+                reject(new Error(errorMsg || "erro_smart_digitier_python"));
             }
         });
     });

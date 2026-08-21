@@ -1598,7 +1598,7 @@ async function setupSmartDigitizerListeners() {
             startBtn.disabled = true;
             startBtn.style.opacity = 0.5;
 
-            const resultPath = await window.api.runSmartDigitizer(smartSelectedImagePath, rows, cols);
+        const resultPath = await window.api.runSmartDigitizer(smartSelectedImagePath, rows, cols, threshold);
 
             if (resultPath) {
                 status.innerText = window.i18n.t('status_success');

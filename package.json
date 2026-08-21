@@ -40,7 +40,8 @@
     ],
     "extraResources": [
       "digitizer.py",
-      "smart_digitizer.py"
+      "smart_digitizer.py",
+      "venv_dist"
     ]
   },
   "scripts": {
