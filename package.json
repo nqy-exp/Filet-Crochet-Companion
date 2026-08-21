@@ -19,6 +19,20 @@
         "dmg"
       ]
     },
+        "win": {
+      "target": [
+        "nsis",
+        "portable" 
+      ]
+
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+
+      "createDesktopShortcut": true
+    },
+
     "files": [
       "**/*",
       "!node_modules/*/{CHANGELOG.md,README.md,test,examples,docs}",
@@ -31,6 +45,7 @@
   },
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win" 
   }
 }
