@@ -33,11 +33,18 @@ To support more handmade enthusiasts, I've added several languages commonly foun
 ---
 ## 🧵 How it works
 
-1. Prepare your pattern in Excel: fill cells to create your filet crochet grid, or use the built-in digitizer tool to generate one from an image (please double-check the output, as the tool may not be 100% accurate). Adjust it until it looks right to you.
+1. Prepare your pattern in Excel: fill cells by black color to create your filet crochet grid, or use the built-in digitizer tool to generate one from an image (please double-check the output, as the tool may not be 100% accurate). Adjust it until it looks right to you.
 2. Import the Excel file into the app.
 3. Track your progress: mark cells as you go.
 
-Note: The app does not modify your Excel file or let you edit the grid. All adjustments must be made in Excel before importing. Importing a new Excel file will reset all progress (completed rows, current position, and emoji marks). Please make sure you've saved your work before switching patterns.
+### 📌 Excel Import Tips
+
+· After importing, the app will automatically detect the boundary based on the last row and column that contain colored cells.
+· If your pattern needs empty margins, mark four corners of pattern in your Excel sheet to define rhe area.
+· Once imported, use the arrow keys to move around and verify that the grid aligns with your pattern.
+
+
+❗️Important: The app does not modify your Excel file or let you edit the grid. All adjustments must be made in Excel ***before importing***. Importing a new Excel file will reset all progress (completed rows, current position, and emoji marks). Please make sure you've saved your work before switching patterns.
 ---
 
 ## 🚀 How to run?
