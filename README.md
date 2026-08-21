@@ -26,6 +26,8 @@ A specialized tool designed to:
     * `Right Click / Drag Emoji` $\rightarrow$ Mark special motifs.
 * **Extras:** Supports notes, customizable rows/cols/group size, and theme colors (HUD color is fixed).
 
+<img width="640" height="420" alt="FCC" src="https://github.com/user-attachments/assets/90d2f0ea-ca28-4507-b4ed-9497d860a409" />
+
 **📸 Digitizer Tool:**
 Manual drawing in Excel is tedious, so I built two modes:
 * **Standard Mode:** For clear images. Automatically detects rows and columns to generate an Excel grid.
