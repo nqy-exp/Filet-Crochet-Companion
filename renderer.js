@@ -389,7 +389,7 @@ drawUIOverlay(model) {
         // Y坐标加上 OFFSET，确保在格子中间
         const y = OFFSET + (i * config.cellSize) + (config.cellSize / 2);
 
-        ctx.font = `bold ${config.cellSize * 0.35}px Arial`;
+        ctx.font = `bold ${config.cellSize * 0.37}px Arial`;
         ctx.fillStyle = "#95a5a6";
         ctx.textAlign = "center"; ctx.textBaseline = "middle";
 
@@ -408,7 +408,7 @@ drawUIOverlay(model) {
     }
 
     // 定义标尺统一的字体大小（随 cellSize 缩放，保证视觉一致性）
-    const rulerFontSize = config.cellSize * 0.3;
+    const rulerFontSize = config.cellSize * 0.35;
     const dotRadius = config.cellSize * 0.05; // 圆点半径也随格子缩放
 
 // --- 2. 【顶部倒序标尺】 (包含中间的小组号) ---
@@ -437,7 +437,7 @@ for (let cIdx = 0; cIdx <= model.totalCols; cIdx += config.groupSize) { // 使�
 
 // B. 【修复版】：画【小组号】 (循环改为 i < totalGroups，确保覆盖所有区间)
 const totalGroups = Math.ceil(model.totalCols / config.groupSize);
-const groupLabelStyle = { color: "#e67e22", fontSize: rulerFontSize * 0.8 };
+const groupLabelStyle = { color: "#e67e22", fontSize: rulerFontSize * 0.9 };
 const viewWidthLimit = sideMargin + (config.viewCols * config.cellSize) + 5; // 增加缓冲
 
 for (let i = 0; i < totalGroups; i++) { // 【关键修复】：这里不再是 totalGroups - 1

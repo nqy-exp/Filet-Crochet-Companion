@@ -400,7 +400,7 @@ drawUIOverlay(model) {
         // Y坐标计算：OFFSET 是顶部预留空间，vRowIdx 决定了在视野中的高度
         const y = OFFSET + (vRowIdx * config.cellSize) + (config.cellSize / 2);
 
-        ctx.font = `bold ${config.cellSize * 0.35}px Arial`;
+        ctx.font = `bold ${config.cellSize * 0.37}px Arial`;
         ctx.fillStyle = "#95a5a6";
         ctx.textAlign = "center"; ctx.textBaseline = "middle";
 
@@ -420,9 +420,9 @@ drawUIOverlay(model) {
 
     // --- 2. 顶部/底部标尺 (Ruler) 部分 ---
     // 这部分逻辑主要基于列 (Column)，不随行号变化，保持原样即可
-    const rulerFontSize = config.cellSize * 0.3;
+    const rulerFontSize = config.cellSize * 0.35;
     const dotRadius = config.cellSize * 0.05;
-    const groupLabelStyle = { color: "#e67e22", fontSize: rulerFontSize * 0.8 };
+    const groupLabelStyle = { color: "#e67e22", fontSize: rulerFontSize * 0.9 };
     const viewWidthLimit = sideMargin + (config.viewCols * config.cellSize) + 5;
 
     // A. 顶部倒序标尺
@@ -442,6 +442,7 @@ drawUIOverlay(model) {
             ctx.beginPath();
             ctx.arc(x, topRulerY + (rulerFontSize * 0.7), dotRadius, 0, Math.PI * 2);
             ctx.fill();
+
         }
     }
 
@@ -471,8 +472,25 @@ drawUIOverlay(model) {
             ctx.fillStyle = groupLabelStyle.color;
             ctx.fillText(totalGroups - i, xMid, topRulerY + (rulerFontSize * 0.3));
 
+
             // 底部小组号正序显示
             ctx.fillText(i + 1, xMid, bottomRulerY + (rulerFontSize * 0.3));
+                   
+            // 2. 画下方的小三角 ▼
+        const triSize = dotRadius * 1.5;
+        ctx.beginPath();
+        ctx.moveTo(xMid, topRulerY + (rulerFontSize * 0.6)); // 三角顶点
+        ctx.lineTo(xMid - triSize, topRulerY + (rulerFontSize * 0.6) + triSize); // 左下
+        ctx.lineTo(xMid + triSize, topRulerY + (rulerFontSize * 0.6) + triSize); // 右下
+        ctx.closePath();
+        ctx.fill();
+       
+        ctx.beginPath();
+        ctx.moveTo(xMid, bottomRulerY + (rulerFontSize * 0.6)); // 三角顶点
+        ctx.lineTo(xMid - triSize, bottomRulerY + (rulerFontSize * 0.6) + triSize); // 左下
+        ctx.lineTo(xMid + triSize, bottomRulerY + (rulerFontSize * 0.6) + triSize); // 右下
+        ctx.closePath();
+        ctx.fill();
         }
     }
 },
@@ -1637,7 +1655,6 @@ async function saveSystemSettings() {
     }
 }
 
-
 window.openHelpModal = function() {
     document.getElementById('help-modal').style.display = 'block';
 };
@@ -1645,6 +1662,7 @@ window.openHelpModal = function() {
 window.closeHelpModal = function() {
     document.getElementById('help-modal').style.display = 'none';
 };
+
 
 
 // Global exposures
