@@ -87,6 +87,8 @@ const i18nData = {
         'btn_apply_save_sys': '保存并应用',
 
         // --- JS 动态文本 & 弹窗 ---
+        'status_smart_img_ready': '图片已就绪，请输入行数和列数', 
+        'status_smart_processing': '正在分析边界并采样，请稍候...',
         'status_img_ready': '图片已就绪，可以转换',
         'status_processing': '正在识别网格并转换，请稍候...',
         'status_success': '🎉 转换成功！请保存文件。',
