@@ -38,7 +38,8 @@ const DEFAULT_GLOBAL_SETTINGS = {
     cellSize: 40,
     groupSize: 5,
     emojiList: ['⭐', '❤️', '🌸', '🧶', '🕸️', '🌙'],
-    language: 'en-US' 
+    language: 'en-US',
+    defaultEmoji: '⭐' 
 };
 
 

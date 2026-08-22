@@ -145,6 +145,7 @@ const CrochetModel = {
         emojiList: ['⭐', '❤️', '🌸', '🧶', '🕸️', '🌙'],
         minimapWidth: 150,  // 新增：小地图默认宽度
         minimapHeight: 150, // 新增：小地图默认高度
+        defaultEmoji: '⭐', 
     },
 
     // 统一的方向计算引擎
@@ -154,7 +155,9 @@ const CrochetModel = {
 
 // --- [MODULE 1: DATA MODEL] --- (找到 init 函数进行替换)
 init(incomingGrid = null, customConfig = null) {
-
+    if (customConfig) {
+        Object.assign(this.config, customConfig); 
+    }
     this.notes = ""; 
     if (incomingGrid && typeof incomingGrid === 'object') {
         // 【修复】：不再强制使用 .reverse()！
@@ -244,7 +247,9 @@ init(incomingGrid = null, customConfig = null) {
     },
 
     toggleEmoji(r, c) {
-        this.grid[r][c].emoji = this.grid[r][c].emoji ? null : (this.config.emojiList[0] || '⭐');
+        // 【核心修改】：不再使用 emojiList[0]，而是使用 config.defaultEmoji
+        const targetEmoji = this.config.defaultEmoji || '⭐';
+        this.grid[r][c].emoji = this.grid[r][c].emoji ? null : targetEmoji;
     }
 };
 
@@ -794,7 +799,8 @@ async function initApp() {
         viewRows: globalAppSettings.viewRows,
         cellSize: globalAppSettings.cellSize,
         groupSize: globalAppSettings.groupSize,
-        emojiList: globalAppSettings.emojiList
+        emojiList: globalAppSettings.emojiList,
+        defaultEmoji: globalAppSettings.defaultEmoji || '⭐' 
     };
     if (window.i18n && globalAppSettings.language) {
         window.i18n.setLang(globalAppSettings.language); 
@@ -1632,6 +1638,7 @@ async function openSystemSettings() {
     safeSetVal('sys-groupSize', globalAppSettings.groupSize);
     safeSetVal('sys-lang', globalAppSettings.language || 'en-US');
     safeSetVal('sys-emojis', globalAppSettings.emojiList.join(', '));
+    safeSetVal('sys-default-emoji', globalAppSettings.defaultEmoji || '⭐');
 
     // 显示模态框
     document.getElementById('system-settings-modal').style.display = 'block';
@@ -1649,13 +1656,16 @@ async function saveSystemSettings() {
         cellSize: parseInt(document.getElementById('sys-cellSize').value),
         groupSize: parseInt(document.getElementById('sys-groupSize').value),
         emojiList: document.getElementById('sys-emojis').value.split(',').map(s => s.trim()),
-        language: document.getElementById('sys-lang').value
+        language: document.getElementById('sys-lang').value,
+        defaultEmoji: document.getElementById('sys-default-emoji').value || '⭐'
+        
     };
 
     const result = await window.api.saveGlobalConfig(newSettings);
     if (result.success) {
         globalAppSettings = newSettings;
         window.i18n.setLang(newSettings.language); 
+        CrochetModel.config.defaultEmoji = newSettings.defaultEmoji;
         alert(window.i18n.t('alert_sys_settings_saved'));
         document.getElementById('system-settings-modal').style.display = 'none';
     } else {

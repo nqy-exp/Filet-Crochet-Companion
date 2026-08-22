@@ -118,6 +118,10 @@ const i18nData = {
 'help_val_drag': '将图标直接拖入格子中',
 'sec_credits_title': '鸣谢:',
 'btn_got_it': '知道了',
+// 在 'label_sys_emojis' 下方添加
+'label_sys_default_emoji': '右键默认 Emoji',
+'hint_sys_default_emoji': '例如: ⭐',
+
 
     },
     'en-US': {
@@ -235,6 +239,9 @@ const i18nData = {
 'help_val_drag': 'Drag icon into cell',
 'sec_credits_title': 'Credits:',
 'btn_got_it': 'Got it',
+// In System Settings section
+'label_sys_default_emoji': 'Default Right-click Emoji',
+'hint_sys_default_emoji': 'e.g. ⭐',
 
     },
         'de-DE': {
@@ -352,6 +359,9 @@ const i18nData = {
 'help_val_drag': 'Icon in Zelle ziehen',
 'sec_credits_title': 'Danksagung:',
 'btn_got_it': 'Verstanden',
+'label_sys_default_emoji': 'Standard-Emoji bei Rechtsklick',
+'hint_sys_default_emoji': 'z.B. ⭐',
+
 
     },
 
@@ -470,6 +480,8 @@ const i18nData = {
 'help_val_drag': 'Faire glisser l\'icône dans la cellule',
 'sec_credits_title': 'Remerciements :',
 'btn_got_it': 'Compris',
+'label_sys_default_emoji': 'Emoji par défaut au clic droit',
+'hint_sys_default_emoji': 'ex : ⭐',
 
     },
 
@@ -588,6 +600,8 @@ const i18nData = {
 'help_val_drag': 'Arrastrar icono a la celda',
 'sec_credits_title': 'Créditos:',
 'btn_got_it': 'Entendido',
+'label_sys_default_emoji': 'Emoji predeterminado al clic derecho',
+'hint_sys_default_emoji': 'ej. ⭐',
 
     },
 
@@ -706,6 +720,9 @@ const i18nData = {
 'help_val_drag': 'Перетащить иконку в ячейку',
 'sec_credits_title': 'Благодарности:',
 'btn_got_it': 'Понятно',
+'label_sys_default_emoji': 'Emoji по умолчанию (ПКМ)',
+'hint_sys_default_emoji': 'напр. ⭐',
+
 
     },
 
@@ -824,6 +841,9 @@ const i18nData = {
 'help_val_drag': 'アイコンをセルにドラッグ',
 'sec_credits_title': 'クレジット:',
 'btn_got_it': '了解',
+'label_sys_default_emoji': '右クリックのデフォルト絵文字',
+'hint_sys_default_emoji': '例: ⭐',
+
 
     },
         'zh-HK': {
@@ -941,6 +961,9 @@ const i18nData = {
 'help_val_drag': '將圖標直接拖入格子中',
 'sec_credits_title': '鳴謝:',
 'btn_got_it': '知道了',
+'label_sys_default_emoji': '預設右鍵 Emoji',
+'hint_sys_default_emoji': '例如: ⭐',
+
 
     },
 
