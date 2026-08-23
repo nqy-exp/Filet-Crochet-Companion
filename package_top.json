@@ -1,7 +1,7 @@
 {
-  "name": "filet-crochet-companion-bottomup",
+  "name": "filet-crochet-companion-topdown",
   "version": "1.0.0",
-  "description": "Filet Lace Crochet Companion",
+  "description": "Filet Lace Crochet Companion-Topdown",
   "author": "QY Niu", 
   "main": "main.js",
   "dependencies": {
@@ -13,7 +13,7 @@
   },
   "build": {
     "appId": "com.qy_niu.filetlace",
-    "productName": "Filet Crochet Companion-Bottomup（beta）",
+    "productName": "Filet Crochet Companion-Topdown（beta）",
     "mac": {
       "category": "public.app-category.productivity",
       "target": [
@@ -26,7 +26,7 @@
         "nsis",
         "portable" 
       ],
-      "icon": "assets/icon.ico" 
+       "icon": "assets/icon.ico" 
     },
     "nsis": {
       "oneClick": false,

@@ -18,8 +18,30 @@ A specialized tool designed to:
 * **Dynamic Progress Filling (Core Mechanic):** 
   This tool treats your crochet work as a continuous process. As you complete rows(by left click), the app visually "**fills in**" the completed area behind your current working row. This creates a clear, intuitive boundary between your finished work and the active zone, helping you stay focused.
   *(Note: The direction of the "fill" match your chosen crochet direction—whether bottom-up or top-down.)*
-* **Direction:** Default Bottom-up (matches my preference). The first row direction is adjustable.
-*For a top-down crochet direction, simply remove renderer.js and rename renderer_top.js to renderer.js after cloning.*
+* **Direction:**  The first row direction is adjustable in both Mode.
+
+- Bottom-Up: Default. 
+
+- Switching to Top-Down Mode
+The repository contains two versions of the app:
+Bottom-Up: renderer.js, main.js, package.json
+Top-Down: renderer_top.js, main_top.js, package_top.json
+To switch to Top-Down mode, replace the three default files with their '_top' versions:
+renderer_top.js   → renderer.js
+main_top.js       → main.js
+package_top.json  → package.json
+In other words, remove or move the existing renderer.js, main.js, and package.json, then rename the corresponding _top files by **removing** '_top' from their names.
+
+>⚠️ Important: Modes and File Formats
+>
+>Because the logic of the coordinates is different, you **cannot** use files from one mode in the other. To avoid confusion, I use different extensions:
+
+>- Bottom-Up Mode: .fccb
+>- Top-Down Mode: .fcct
+
+>Version Selection:
+>For a cleaner experience, future releases will come as two separate versions. Please download the one that matches your habit (working up or working down).
+
 * **Controls:**
     * `Left Click` $\rightarrow$ Mark as "Done" (with a colored overlay).
     * `Double Left Click` $\rightarrow$ Undo/Rewind.
@@ -108,4 +130,4 @@ This app is currently in beta and is being tested through my personal crochet wo
 
 *This README was translated with AI assistance.*
 
-*Last update: 2026.08.21*
+*Last update: 2026.08.23*

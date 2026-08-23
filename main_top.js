@@ -1,3 +1,5 @@
+//  This is an alternative version for top-down crochet direction.
+// To use it, rename this file to main.js and replace the original.
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
@@ -99,8 +101,8 @@ ipcMain.handle('save-file', async (event, payload) => {
         } else {
             const { filePath: newPath } = await dialog.showSaveDialog({
                 title: 'Save New Project',
-                defaultPath: path.join(app.getPath('documents'), 'my_crochet_project.fccb'),
-                filters: [{ name: 'FCCB Project', extensions: ['fccb'] }]
+                defaultPath: path.join(app.getPath('documents'), 'my_crochet_project.fcct'),
+                filters: [{ name: 'FCCT Project', extensions: ['fcct'] }]
             });
 
 
@@ -120,8 +122,8 @@ ipcMain.handle('save-file', async (event, payload) => {
 // 打开项目 (.fcc 文件)
 ipcMain.handle('open-file', async () => {
     const { filePaths } = await dialog.showOpenDialog({
-        title: 'Open FCCB Project',
-        filters: [{ name: 'FCCB Project', extensions: ['fccb'] }],
+        title: 'Open FCCT Project',
+        filters: [{ name: 'FCCT Project', extensions: ['fcct'] }],
         properties: ['openFile']
     });
 
@@ -136,7 +138,7 @@ ipcMain.handle('open-file', async () => {
     }
 
 
-    const defaultFilePath = path.join(app.getPath('documents'), 'my_crochet_project.fccb');
+    const defaultFilePath = path.join(app.getPath('documents'), 'my_crochet_project.fcct');
     if (fs.existsSync(defaultFilePath)) {
         try {
             const content = fs.readFileSync(defaultFilePath, 'utf-8');

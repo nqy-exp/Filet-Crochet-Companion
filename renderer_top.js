@@ -2,6 +2,9 @@
 // To use it, rename this file to renderer.js and replace the original.
 let isProjectLoaded = false; 
 let currentFilePath = null; // 用于记录当前打开的文件路径
+
+
+const CURRENT_SCHEMA_VERSION = 1; 
 // --- 🛠️ 图片转 Excel 工具逻辑 (最终正确版) ---
 
 
@@ -825,6 +828,7 @@ async function saveProject() {
     if (notesArea) syncNotesToModel(notesArea);
 
     const projectData = {
+        schema_version: CURRENT_SCHEMA_VERSION, 
         grid: CrochetModel.grid,
         rowProgress: CrochetModel.rowProgress,
         currentProgress: {
@@ -876,26 +880,49 @@ async function loadProject() {
     try {
         const result = await window.api.openFile();
         if (result && result.success) {
-            CrochetModel.init(result.data.grid, null);
-            CrochetModel.notes = result.data.notes || "";
-            CrochetModel.config = result.data.config || CrochetModel.config;
+            let loadedData = result.data;
+                // --- 【核心修改：版本检查与自动迁移逻辑】 ---
 
-            const progress = result.data.currentProgress;
+            // 情况 1: 如果文件里根本没有 schema_version 字段 (说明是改代码前的旧文件, 即 v0)
+            if (!loadedData.schema_version) {
+                console.log("Legacy (v0) format detected. Performing automatic upgrade...");
+                
+                loadedData.schema_version = 1;
+            } 
+            // 情况 2: 如果版本号比当前软件要求的还要高 (用户用了未来的版本)
+            else if (loadedData.schema_version > CURRENT_SCHEMA_VERSION) {
+                alert("This file was created by a newer version of the software. Please upgrade your app to avoid data corruption!");
+                return; // Abort loading
+            } 
+            // 情况 3: 版本完全匹配 (已经是 v1)
+            else {
+                console.log(`Standard format (v${loadedData.schema_version}) detected.`);
+            }
+
+            CrochetModel.init(loadedData.grid, null); 
+            CrochetModel.notes = loadedData.notes || "";
+            CrochetModel.config = loadedData.config || CrochetModel.config;
+
+            const progress = loadedData.currentProgress; // 使用 loadedData
             if (progress) {
                 CrochetModel.curR = progress.curR;
                 CrochetModel.curC = progress.curC;
                 CrochetModel.direction = progress.direction;
             }
 
-            CrochetModel.rowProgress = result.data.rowProgress || new Array(CrochetModel.totalRows).fill(-1);
-            if (result.data.path) {
-                const fileName = result.data.path.split(/[\\/]/).pop();
+            // 使用 loadedData 获取行进度
+            CrochetModel.rowProgress = loadedData.rowProgress || new Array(CrochetModel.totalRows).fill(-1);
+
+            // 使用 loadedData 获取路径信息
+            if (loadedData.path) {
+                const fileName = loadedData.path.split(/[\\/]/).pop();
                 window.api.setWindowTitle(`${window.i18n.t('app_title')} --- ${fileName}`);
             }
 
+            // 渲染逻辑...
             CrochetRenderer.resize(CrochetModel);
             CrochetRenderer.renderAll(CrochetModel);
-            currentFilePath = result.path;
+            currentFilePath = result.path;     
             isProjectLoaded = true;
             updateButtonStates();
 
@@ -907,7 +934,6 @@ async function loadProject() {
         console.error("Load failed:", err);
     }
 }
-
 
 
 async function importExcel() {
