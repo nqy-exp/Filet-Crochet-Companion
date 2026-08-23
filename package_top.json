@@ -13,26 +13,26 @@
   },
   "build": {
     "appId": "com.qy_niu.filetlace",
-    "productName": "Filet Crochet Companion-Topdown（beta）",
+    "productName": "Filet Crochet Companion-TD(beta)",
     "mac": {
       "category": "public.app-category.productivity",
       "target": [
         "dmg"
       ],
-      "icon": "assets/icon.icns" 
+      "icon": "assets/icon_top.icns" 
     },
         "win": {
       "target": [
         "nsis",
         "portable" 
       ],
-       "icon": "assets/icon.ico" 
+       "icon": "assets/icon_top.ico" 
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "installerIcon": "assets/icon.ico",
-      "uninstallerIcon": "assets/icon.ico",
+      "installerIcon": "assets/icon_top.ico",
+      "uninstallerIcon": "assets/icon_top.ico",
       "createDesktopShortcut": true
     },
 

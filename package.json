@@ -1,7 +1,7 @@
 {
   "name": "filet-crochet-companion-bottomup",
   "version": "1.0.0",
-  "description": "Filet Lace Crochet Companion",
+  "description": "Filet Lace Crochet Companion-bottomup",
   "author": "QY Niu", 
   "main": "main.js",
   "dependencies": {
@@ -13,7 +13,7 @@
   },
   "build": {
     "appId": "com.qy_niu.filetlace",
-    "productName": "Filet Crochet Companion-Bottomup（beta）",
+    "productName": "Filet Crochet Companion-BU(beta)",
     "mac": {
       "category": "public.app-category.productivity",
       "target": [
