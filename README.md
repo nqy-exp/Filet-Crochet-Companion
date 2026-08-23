@@ -68,7 +68,7 @@ To support more handmade enthusiasts, I've added several languages commonly foun
 1. Prepare your pattern in Excel: fill cells to create your filet crochet grid, or use the built-in digitizer tool to generate one from an image (please double-check the output, as the tool may not be 100% accurate). Adjust it until it looks right to you.
 2. Import the Excel file into the app.
 3. Track your progress: mark cells as you go.
-4. Don’t forget to save your progress regularly, there’s no auto-save or exit warning.
+4. Don’t forget to save your progress regularly, there’s no auto-save.
 
 ### 📌  Pro Tips for Excel Import
 
