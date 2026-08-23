@@ -9,6 +9,10 @@ const ExcelJS = require('exceljs');
 
 
 // --- 1. 初始化窗口 ---
+
+
+let isClosing = false; // 用于标记是否是用户点击了“确认关闭”后的二次关闭动作
+
 function createWindow() {
     const win = new BrowserWindow({
         width: 1200, 
@@ -22,7 +26,45 @@ function createWindow() {
     });
 
     win.loadFile(path.join(__dirname, 'index.html'));
+
+    // --- 【新增】：监听窗口关闭事件 ---
+    win.on('close', (e) => {
+        if (isClosing) return; // 如果是由于用户点击了弹窗中的“确定”触发的，则允许直接关闭
+
+        e.preventDefault(); // 阻止默认关闭动作
+        win.webContents.send('ask-dirty'); // 发送询问指令给渲染层
+    });
 }
+
+// --- 【新增】：监听来自渲染层的状态返回 ---
+ipcMain.on('dirty-status-response', async (event, data) => { // 注意这里我们直接拿 data 对象
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (!win) return;
+
+    // 【核心修改】：从传过来的 data 中解构出 buttons
+    const { dirty, title, message, buttons } = data;
+
+    if (!dirty) {
+        isClosing = true;
+        win.close();
+        return;
+    }
+
+    // 弹出对话框
+    const choice = dialog.showMessageBoxSync(win, {
+        type: 'warning',
+        // 【关键】：使用渲染层传过来的 buttons，如果没有传则给一个默认兜底
+        buttons: buttons || ['Confirm Close', 'Cancel'], 
+        defaultId: 1, 
+        title: title,
+        message: message
+    });
+
+    if (choice === 0) { 
+        isClosing = true;
+        win.close();
+    }
+});
 
 
 // --- 2. 全局配置逻辑 (Global Settings) ---

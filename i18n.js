@@ -121,7 +121,9 @@ const i18nData = {
 // 在 'label_sys_emojis' 下方添加
 'label_sys_default_emoji': '右键默认 Emoji',
 'hint_sys_default_emoji': '例如: ⭐',
-
+'warn_dirty_title': '未保存的更改',
+'warn_dirty_msg': '您当前的项目尚未保存，关闭将导致进度丢失。是否确认退出？',
+'btn_confirm_close': '确认退出',
 
     },
     'en-US': {
@@ -242,6 +244,9 @@ const i18nData = {
 // In System Settings section
 'label_sys_default_emoji': 'Default Right-click Emoji',
 'hint_sys_default_emoji': 'e.g. ⭐',
+'warn_dirty_title': 'Unsaved Changes',
+'warn_dirty_msg': 'Your current project is not saved. Closing will cause loss of progress. Confirm to exit?',
+'btn_confirm_close': 'Confirm Close', 
 
     },
         'de-DE': {
@@ -361,6 +366,10 @@ const i18nData = {
 'btn_got_it': 'Verstanden',
 'label_sys_default_emoji': 'Standard-Emoji bei Rechtsklick',
 'hint_sys_default_emoji': 'z.B. ⭐',
+'warn_dirty_title': 'Ungespeicherte Änderungen',
+'warn_dirty_msg': 'Ihr aktuelles Projekt ist nicht gespeichert. Schließen führt zum Verlust des Fortschritts. Bestätigen Sie das Schließen?',
+'btn_confirm_close': 'Schließen bestätigen',
+
 
 
     },
@@ -482,6 +491,10 @@ const i18nData = {
 'btn_got_it': 'Compris',
 'label_sys_default_emoji': 'Emoji par défaut au clic droit',
 'hint_sys_default_emoji': 'ex : ⭐',
+'warn_dirty_title': 'Modifications non enregistrées',
+'warn_dirty_msg': 'Votre projet actuel n\'est pas enregistré. Fermer entraînera la perte de votre progression. Confirmer la fermeture ?',
+'btn_confirm_close': 'Confirmer la fermeture',
+
 
     },
 
@@ -602,6 +615,10 @@ const i18nData = {
 'btn_got_it': 'Entendido',
 'label_sys_default_emoji': 'Emoji predeterminado al clic derecho',
 'hint_sys_default_emoji': 'ej. ⭐',
+'warn_dirty_title': 'Cambios sin guardar',
+'warn_dirty_msg': 'Su proyecto actual no está guardado. Al cerrar se perderá el progreso. ¿Confirmar cierre?',
+'btn_confirm_close': 'Confirmar cierre',
+
 
     },
 
@@ -722,6 +739,9 @@ const i18nData = {
 'btn_got_it': 'Понятно',
 'label_sys_default_emoji': 'Emoji по умолчанию (ПКМ)',
 'hint_sys_default_emoji': 'напр. ⭐',
+'warn_dirty_title': 'Несохраненные изменения',
+'warn_dirty_msg': 'Ваш текущий проект не сохранен. Закрытие приведет к потере прогресса. Подтвердить закрытие?',
+'btn_confirm_close': 'Подтвердить закрытие',
 
 
     },
@@ -843,6 +863,9 @@ const i18nData = {
 'btn_got_it': '了解',
 'label_sys_default_emoji': '右クリックのデフォルト絵文字',
 'hint_sys_default_emoji': '例: ⭐',
+'warn_dirty_title': '未保存の変更',
+'warn_dirty_msg': '現在のプロジェクトは保存されていません。閉じると進行状況が失われます。終了しますか？',
+'btn_confirm_close': '閉じるを確認',
 
 
     },
@@ -963,6 +986,9 @@ const i18nData = {
 'btn_got_it': '知道了',
 'label_sys_default_emoji': '預設右鍵 Emoji',
 'hint_sys_default_emoji': '例如: ⭐',
+'warn_dirty_title': '未儲存的更改',
+'warn_dirty_msg': '您目前的項目尚未儲存，關閉將導致進度遺失。是否確認退出？',
+'btn_confirm_close': '確認退出',
 
 
     },

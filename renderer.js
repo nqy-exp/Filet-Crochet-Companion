@@ -1,6 +1,7 @@
 // 【新增】：全局状态追踪，用于控制 UI 按钮的可用性
 let isProjectLoaded = false; 
 let currentFilePath = null; // 用于记录当前打开的文件路径
+let isDirty = false; 
 
 const CURRENT_SCHEMA_VERSION = 1; 
 // --- 🛠️ 图片转 Excel 工具逻辑 (最终正确版) ---
@@ -194,7 +195,7 @@ init(incomingGrid = null, customConfig = null) {
      */
     advance(r, c) {
         const rowDir = this.getRowDirection(r);
-
+        isDirty = true;
         // 1. 处理当前行的水平填充
         if (rowDir === 1) {
             for (let i = 0; i <= c; i++) this.grid[r][i].isDone = true;
@@ -221,6 +222,7 @@ init(incomingGrid = null, customConfig = null) {
      */
     rewind(r, c) {
         const rowDir = this.getRowDirection(r);
+        isDirty = true;
         const lastIdx = this.rowProgress[r];
         if (lastIdx === -1) return;
 
@@ -251,6 +253,7 @@ init(incomingGrid = null, customConfig = null) {
     toggleEmoji(r, c) {
         // 【核心修改】：不再使用 emojiList[0]，而是使用 config.defaultEmoji
         const targetEmoji = this.config.defaultEmoji || '⭐';
+        isDirty = true;
         this.grid[r][c].emoji = this.grid[r][c].emoji ? null : targetEmoji;
     }
 };
@@ -650,6 +653,7 @@ const InteractionManager = {
         const notesArea = document.getElementById('project-notes');
         if (notesArea) {
             notesArea.addEventListener('input', () => {
+                isDirty = true;
                 syncNotesToModel(notesArea); // 调用我们后面定义的函数
             });
         }
@@ -774,6 +778,7 @@ handleDrop(e) {
     let rIdx = this.model.curR - visualRowIdx;
 
     if (rIdx >= 0 && rIdx < this.model.totalRows && realC >= 0 && realC < this.model.totalCols) {
+        isDirty = true; 
         this.model.grid[rIdx][realC].emoji = emoji;
         this.renderer.renderAll(this.model);
     }
@@ -828,6 +833,21 @@ async function initApp() {
         if (window.i18n) {
         window.i18n.init();
     }
+
+    window.api.onAskDirty(() => {
+        // 使用你的 i18n 系统获取翻译好的字符串
+        const translationData = {
+            title: window.i18n.t('warn_dirty_title'), 
+            message: window.i18n.t('warn_dirty_msg'),
+            buttons: [window.i18n.t('btn_confirm_close'), window.i18n.t('btn_cancel')],
+        };
+
+        // 将状态和“已经翻译好”的字符串打包发回给主进程
+        window.api.respondDirty({
+            dirty: isDirty,
+            ...translationData
+        });
+    });
 }
 
 
@@ -857,6 +877,7 @@ async function saveProject() {
         });
 
         if (result && result.success) {
+            isDirty = false;
             currentFilePath = result.path; 
             console.log("Project successfully saved to:", currentFilePath);
             const fileName = result.path.split(/[\\/]/).pop();
@@ -937,6 +958,7 @@ async function loadProject() {
 
             CrochetRenderer.resize(CrochetModel);
             CrochetRenderer.renderAll(CrochetModel);
+            isDirty = false; 
             currentFilePath = result.path;
             isProjectLoaded = true;
             updateButtonStates();
@@ -1493,6 +1515,7 @@ async function createNewProject() {
 
     CrochetModel.init();
     CrochetModel.notes = "";
+    isDirty = false; 
     isProjectLoaded = false;
     currentFilePath = null;
 

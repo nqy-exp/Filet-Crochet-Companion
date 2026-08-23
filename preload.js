@@ -12,5 +12,7 @@ contextBridge.exposeInMainWorld('api', {
     runSmartDigitizer: (imagePath, rows, cols, threshold) => ipcRenderer.invoke('run-smart-digitizer', { imagePath, rows, cols, threshold }),
     moveFile: (oldPath, newPath) => ipcRenderer.invoke('move-file', oldPath, newPath),
     saveAsPath: (defaultPath) => ipcRenderer.invoke('save-as-path', defaultPath),
-    readFileAsBase64: (filePath) => ipcRenderer.invoke('read-file-as-base64', filePath)
+    readFileAsBase64: (filePath) => ipcRenderer.invoke('read-file-as-base64', filePath),
+    onAskDirty: (callback) => ipcRenderer.on('ask-dirty', (_event, value) => callback(value)), // 监听主进程的询问
+    respondDirty: (data) => ipcRenderer.send('dirty-status-response', data),    
 });
