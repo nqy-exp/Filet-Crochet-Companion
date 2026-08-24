@@ -593,6 +593,11 @@ resize(model) {
 
     this.miniCanvas.width = model.totalCols;
     this.miniCanvas.height = model.totalRows;
+    const miniContainer = document.getElementById('minimap-container');
+    if (miniContainer) {
+        miniContainer.style.width = config.minimapWidth + "px";
+        miniContainer.style.height = config.minimapHeight + "px";
+    }
 },
 
 
@@ -1296,11 +1301,8 @@ async function applySettings() {
     
     config.minimapWidth = parseInt(document.getElementById('set-miniW').value) || 150;
     config.minimapHeight = parseInt(document.getElementById('set-miniH').value) || 150;
-    const miniContainer = document.getElementById('minimap-container');
-    if (miniContainer) {
-        miniContainer.style.width = config.minimapWidth + "px";
-        miniContainer.style.height = config.minimapHeight + "px";
-    }
+
+
     // 4. 通知渲染器刷新
     updateEmojiPalette();
     CrochetRenderer.resize(CrochetModel);
