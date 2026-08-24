@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title data-i18n="app_title">Filet Crochet Companion - Workspace</title>
-    <!-- 此处省略你原有的 <style> 内容，请务必保留你原来的 CSS -->
+
      <style>
         /* --- 🎨 温暖手工风格设计变量 --- */
         :root {
             --bg-main: #1a1a1a;          /* 画布背景 (深色) */
             --bg-paper: #fdf5e6;         /* 全局暖米色背景 */
-            --bg-hud: #eaddca;           /* 底栏模块背景 (温暖的浅棕/米色) */
-            --bg-card: #ffffff;          /* 模块卡片颜色 (纯白，增加对比度) */
+            --bg-hud: #f7ece1;         /* 底栏模块背景 (温暖的浅棕/米色) */
+            --bg-card: #fffdfa;          /* 模块卡片颜色 (纯白，增加对比度) */
             --text-main: #4a3728;        /* 深巧克力色文字 */
             --text-muted: #8d7b68;       /* 柔和棕色文字 */
-            --border-color: #dcd0c0;     /* 模块边框线 */
+            --border-color: #ede4d5;     /* 模块边框线 */
             --accent-new: #f1c40f;       /* 新建按钮 (黄色) */
             --accent-open: #3498db;      /* 打开按钮 (蓝色) */
             --accent-save: #2ecc71;      /* 保存按钮 (绿色) */
@@ -141,7 +141,7 @@
         /* --- 🛠️ 底部模块化 HUD (Modular HUD) --- */
         #hud {
             height: 160px; /* 【已调高】让布局更舒展 */
-            background-color: var(--bg-paper);
+            background-color: var(--bg-hud);
             display: flex;
             align-items: stretch; 
             padding: 12px 20px;
@@ -180,7 +180,7 @@
         }
         .emoji-tile {
             aspect-ratio: 1 / 1;
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.6);
             border: 1px solid var(--border-color);
             border-radius: 6px;
             display: flex;
