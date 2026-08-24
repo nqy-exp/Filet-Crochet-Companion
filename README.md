@@ -77,7 +77,8 @@ To support more handmade enthusiasts, I've added several languages commonly foun
 - Alignment Check: Use the arrow keys to move around and ensure the grid aligns perfectly with your pattern before you start.
 
 
-❗️ Attention: The app is a viewer/tracker; it does not modify your original Excel file. All grid adjustments must be made in Excel before importing. Importing a new file will reset all current progress.
+❗️ Attention: The app is a viewer/tracker; it does not modify your original Excel file. All grid adjustments must be made in Excel before importing. Importing a new file will reset all current progress. 
+If you only want to make a small change while in crochet process, there's a convenient method: you can mark the spot with the ⚫️/⚪️ and add a note in the notes section.
 
 ---
 

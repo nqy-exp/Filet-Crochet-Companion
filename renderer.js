@@ -13,7 +13,7 @@ let globalAppSettings = {
     viewRows: 2,
     cellSize: 40,
     groupSize: 5,
-    emojiList: ['⭐', '❤️', '🌸', '🧶', '🕸️', '🌙']
+    emojiList: ['⭐', '⚫️', '⚪️', '🧶', '🕸️', '💡']
 };
 
 function safeSetVal(id, value) {
@@ -145,7 +145,7 @@ const CrochetModel = {
         checkerboardLight: '#ecf0f1',
         checkerboardDark: '#bdc3c7',
         firstRowDir: 1, 
-        emojiList: ['⭐', '❤️', '🌸', '🧶', '🕸️', '🌙'],
+        emojiList: ['⭐', '⚫️', '⚪️', '🧶', '🕸️', '💡'],
         minimapWidth: 150,  // 新增：小地图默认宽度
         minimapHeight: 150, // 新增：小地图默认高度
         defaultEmoji: '⭐', 
