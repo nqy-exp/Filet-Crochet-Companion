@@ -1078,30 +1078,34 @@ function updateEmojiPalette() {
     const palette = document.getElementById('emoji-palette');
     if (!palette) return;
 
-    // 标题不再直接写在 HTML 里，而是由 CSS 的 card-label 管理
-    let html = '';
+    // 1. 先清空现有的内容（相当于之前的 innerHTML = ''）
+    palette.innerHTML = '';
 
+    // 2. 遍历表情列表，使用 DOM API 安全地创建元素
     CrochetModel.config.emojiList.forEach(emoji => {
-        // 我们把 emoji 包裹在一个名为 emoji-tile 的卡片里
-        html += `
-            <div class="emoji-tile" draggable="true" title="${emoji}">
-                ${emoji}
-            </div>`;
+        // 创建 div 元素
+        const tile = document.createElement('div');
+        
+        // 设置属性 (这些操作是安全的)
+        tile.className = 'emoji-tile';
+        tile.draggable = true;
+        tile.title = emoji;    // 悬停显示的文字
+        tile.textContent = emoji; // 【核心】：使用 textContent 而不是 innerHTML，防止 XSS
+
+        // 将创建好的元素添加到面板中
+        palette.appendChild(tile);
     });
 
-    palette.innerHTML = html;
-
-    // 【关键】：重新绑定拖拽事件到新的 .emoji-tile 上
+    // 3. 重新绑定拖拽事件 (这部分逻辑保持不变)
     document.querySelectorAll('.emoji-tile').forEach(item => {
         item.addEventListener('dragstart', (e) => {
-            // 获取卡片里的文本内容（即 emoji 本身）
-            const emojiContent = e.target.innerText;
+            // 使用 textContent 获取内容，确保拿到的是纯文本
+            const emojiContent = e.target.textContent; 
             e.dataTransfer.setData("text/plain", emojiContent);
             e.dataTransfer.effectAllowed = "copy";
         });
     });
 }
-
 
 function colorToHex(color) {
     if (color.startsWith('#')) return color;

@@ -273,18 +273,49 @@ ipcMain.handle('save-as-path', async (event, tempFilePath) => {
 
 // --- 移动文件指令 (终极修复版) ---
 
+
+
+const os = require('os'); 
+
+// 辅助函数：等待一段时间
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 ipcMain.handle('move-file', async (event, oldPath, newPath) => {
     try {
-        const fs = require('fs');
-        if (oldPath === newPath) return true; // 只有路径完全一致才跳过
+        if (oldPath === newPath) return true;
 
-        // 使用复制+删除，确保能跨分区（从系统临时区到用户下载区）搬家
+        // --- 【核心改进：带重试机制的等待逻辑】 ---
+        let attempts = 0;
+        const maxAttempts = 5; // 最多尝试 5 次
+        let fileReady = false;
+
+        console.log(`[Move] Attempting to move: ${oldPath}`);
+
+        while (attempts < maxAttempts) {
+            if (fs.existsSync(oldPath)) {
+                fileReady = true;
+                break; // 找到了文件，跳出循环
+            }
+            attempts++;
+            console.log(`[Move] File not ready, retrying in 200ms... (Attempt ${attempts}/${maxAttempts})`);
+            await sleep(200); // 等待 200 毫秒再试
+        }
+
+        if (!fileReady) {
+            throw new Error(`File not found after ${maxAttempts} attempts: ${oldPath}`);
+        }
+        // ------------------------------------------
+
+        // 执行移动 (使用 copy + unlink 是最安全的跨分区方案)
         fs.copyFileSync(oldPath, newPath);
         fs.unlinkSync(oldPath);
+
+        console.log(`[Move] Success: ${newPath}`);
         return true;
     } catch (err) {
-        console.error("Move error:", err); 
-        return false;
+        console.error('[Main] Move-file Error:', err.message);
+        // 抛出错误，让前端能通过 try-catch 捕获并弹窗提示用户
+        throw err; 
     }
 });
 
@@ -397,15 +428,50 @@ ipcMain.handle('import-excel', async () => {
 
 
 // --- 🛠️ 其他辅助指令 ---
+
+
+// --- 在文件顶部或 handle 函数上方定义这些配置 ---
+const ALLOWED_IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.bmp']);
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 我帮你调到了 100MB，这对于图片来说已经非常巨大了，绝对够用
+
+// --- 修改后的函数 ---
 ipcMain.handle('read-file-as-base64', async (event, filePath) => {
     try {
-        const data = fs.readFileSync(filePath);
-        return `data:image/${path.extname(filePath).substring(1)};base64,${data.toString('base64')}`;
+        // 1. 安全检查：将路径解析为绝对路径，防止 "../../" 这种路径穿越攻击
+        const resolvedPath = path.resolve(filePath);
+
+        // 2. 检查文件扩展名是否在允许的图片列表中
+        const ext = path.extname(resolvedPath).toLowerCase();
+        if (!ALLOWED_IMAGE_EXTENSIONS.has(ext)) {
+            throw new Error('Unsupported file type. Please select an image.');
+        }
+
+        // 3. 获取文件状态（检查是否存在、是否是普通文件、大小是多少）
+        const stat = fs.statSync(resolvedPath);
+
+        if (!stat.isFile()) {
+            throw new Error('The selected path is not a regular file.');
+        }
+
+        // 4. 检查文件大小，防止内存溢出 (DoS攻击)
+        if (stat.size > MAX_FILE_SIZE) {
+            throw new Error(`File is too large. Max limit is ${MAX_FILE_SIZE / (1024 * 1024)}MB.`);
+        }
+
+        // 5. 读取文件内容
+        const data = fs.readFileSync(resolvedPath);
+
+        // 6. 返回 Base64 格式字符串
+        // 注意：这里使用 ext.slice(1) 是为了把 ".jpg" 变成 "jpg"
+        return `data:image/${ext.slice(1)};base64,${data.toString('base64')}`;
+
     } catch (err) {
-        console.error("Read file error:", err); 
-        return null;
+        console.error('[Main] Failed to read image:', err.message);
+        // 将错误抛给渲染层，让用户能看到报错（比如“文件太大”或“格式不支持”）
+        throw err; 
     }
 });
+
 
 
 ipcMain.on('set-window-title', (event, title) => {
