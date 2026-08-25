@@ -273,49 +273,66 @@ ipcMain.handle('save-as-path', async (event, tempFilePath) => {
 
 // --- 移动文件指令 (终极修复版) ---
 
+const os = require('os');
 
-
-const os = require('os'); 
-
-// 辅助函数：等待一段时间
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 ipcMain.handle('move-file', async (event, oldPath, newPath) => {
     try {
         if (oldPath === newPath) return true;
 
-        // --- 【核心改进：带重试机制的等待逻辑】 ---
+        // 安全检查：source 必须位于系统临时目录内
+        const tempDir = path.resolve(os.tmpdir()) + path.sep;
+        const resolvedOldPath = path.resolve(oldPath);
+
+        if (!resolvedOldPath.startsWith(tempDir)) {
+            throw new Error('Invalid source file path.');
+        }
+
+        // 等待临时文件生成完成
         let attempts = 0;
-        const maxAttempts = 5; // 最多尝试 5 次
+        const maxAttempts = 5;
         let fileReady = false;
 
-        console.log(`[Move] Attempting to move: ${oldPath}`);
+        console.log(`[Move] Attempting to move: ${resolvedOldPath}`);
 
         while (attempts < maxAttempts) {
-            if (fs.existsSync(oldPath)) {
+            if (fs.existsSync(resolvedOldPath)) {
                 fileReady = true;
-                break; // 找到了文件，跳出循环
+                break;
             }
+
             attempts++;
-            console.log(`[Move] File not ready, retrying in 200ms... (Attempt ${attempts}/${maxAttempts})`);
-            await sleep(200); // 等待 200 毫秒再试
+            console.log(
+                `[Move] File not ready, retrying in 200ms... (Attempt ${attempts}/${maxAttempts})`
+            );
+
+            await sleep(200);
         }
 
         if (!fileReady) {
-            throw new Error(`File not found after ${maxAttempts} attempts: ${oldPath}`);
+            throw new Error(
+                `File not found after ${maxAttempts} attempts: ${resolvedOldPath}`
+            );
         }
-        // ------------------------------------------
 
-        // 执行移动 (使用 copy + unlink 是最安全的跨分区方案)
-        fs.copyFileSync(oldPath, newPath);
-        fs.unlinkSync(oldPath);
+        // 确认 source 是普通文件
+        const stat = fs.statSync(resolvedOldPath);
+
+        if (!stat.isFile()) {
+            throw new Error('Source path is not a regular file.');
+        }
+
+        // 保持原来的跨分区移动方式
+        fs.copyFileSync(resolvedOldPath, newPath);
+        fs.unlinkSync(resolvedOldPath);
 
         console.log(`[Move] Success: ${newPath}`);
         return true;
+
     } catch (err) {
         console.error('[Main] Move-file Error:', err.message);
-        // 抛出错误，让前端能通过 try-catch 捕获并弹窗提示用户
-        throw err; 
+        throw err;
     }
 });
 
