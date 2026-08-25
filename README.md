@@ -139,4 +139,4 @@ This app is currently in beta and is being tested through my personal crochet wo
 
 *This README was translated with AI assistance.*
 
-*Last update: 2026.08.23*
+*Last update: 2026.08.25*
