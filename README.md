@@ -1,7 +1,15 @@
 
-# 🧶 Filet Crochet Companion (Beta)
+# 🧶 Filet Crochet Companion
 
 **Vibe Coding Project.** I built this because I kept losing track of rows while crocheting filet lace patterns. This companion helps you focus on specific sections, move around, and mark your progress easily.
+
+>🚧 Work in Progress
+>
+>This is a personal hobby project that I am developing and testing in my spare time. It is still under active development and should be considered experimental software.
+>
+>It has not been professionally security audited. For safety, please only open .fccb / .fcct files created by yourself or from sources you fully trust.
+>
+>The project is currently developed primarily for my own use, and things may break or change as development continues. 
 
 ## 🛠️ What does it do?
 A specialized tool designed to:
