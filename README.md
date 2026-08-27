@@ -66,9 +66,9 @@ Manual drawing in Excel is tedious, so I built two modes:
 ⚠️ Note: The digitizer currently outputs black-and-white patterns. For colored patterns, please use an external tool or edit the Excel file manually.
 
 ### 🌐 Language Support
-To support more handmade enthusiasts, I've added several languages commonly found in crochet magazines: Simplified Chinese, Traditional Chinese, English, French, German, Spanish, Russian, and Japanese.
+To support more handmade lovers worldwide, I've expanded the language support to include: English, Simplified Chinese, German, Spanish, French, Italian, Japanese, Korean, Portuguese, Russian, Vietnamese, Turkish, Ukrainian, and Traditional Chinese.
 
-**Note:** My language is Simplified Chinese; all other languages are **AI-translated**. If you spot any translation errors, please let me know via an Issue!
+**Note**: My native language is Simplified Chinese; all other languages are ***AI-translated***. If you spot any translation errors, please let me know via an Issue!
 
 ---
 ## 🧵 How it works
@@ -139,4 +139,4 @@ This app is currently in beta and is being tested through my personal crochet wo
 
 *This README was translated with AI assistance.*
 
-*Last update: 2026.08.25*
+*Last update: 2026.08.27*
